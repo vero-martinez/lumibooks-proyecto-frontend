@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Mail } from "lucide-react";
+import { Eye, EyeOff, Mail, Loader2 } from "lucide-react";
 import Link from "next/link";
 
 import { loginSchema, LoginSchema } from "@/features/auth/schemas";
@@ -87,7 +87,14 @@ export function LoginForm() {
                 className="w-full h-12"
                 disabled={isPending}
             >
-                {isPending ? "Iniciando sesión..." : "Iniciar sesión"}
+                {isPending ? (
+                    <>
+                        <Loader2 size={18} className="animate-spin" />
+                        Iniciando Sesión...
+                    </>
+                ) : (
+                    "Iniciar Sesión"
+                )}
             </Button>
 
             {/* REGISTER LINK */}
