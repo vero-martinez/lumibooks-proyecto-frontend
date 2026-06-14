@@ -25,13 +25,13 @@ export const registerSchema = z.object({
         .string()
         .min(1, "El nombre es obligatorio")
         .max(150, "El nombre no puede superar los 150 caracteres")
-        .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$/, "El nombre solo puede contener letras y espacios"),
+        .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$/, "Solo letras y espacios"),
 
     lastName: z
         .string()
         .min(1, "El apellido es obligatorio")
         .max(150, "El apellido no puede superar los 150 caracteres")
-        .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$/, "El apellido solo puede contener letras y espacios"),
+        .regex(/^[A-Za-zÁÉÍÓÚáéíóúÑñ ]+$/, "Solo letras y espacios"),
 
     email: z
         .string()
@@ -43,6 +43,10 @@ export const registerSchema = z.object({
         .string()
         .min(1, "La contraseña es obligatoria")
         .min(8, "La contraseña debe tener al menos 8 caracteres"),
+
+    confirmPassword: z
+        .string()
+        .min(1, "Confirma tu contraseña"),
 
     dni: z
         .string()
@@ -60,6 +64,9 @@ export const registerSchema = z.object({
         .refine((val) => val === true, "Debes aceptar los términos y condiciones"),
 
     subscribedToNewsletter: z.boolean().optional(),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Las contraseñas no coinciden",
+    path: ["confirmPassword"],
 });
 
 // Tipos inferidos desde los schemas
