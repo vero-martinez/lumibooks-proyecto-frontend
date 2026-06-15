@@ -12,6 +12,7 @@ import { useRegister } from "@/features/auth/hooks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { error } from "console";
 
 export function RegisterForm() {
     const [showPassword, setShowPassword] = useState(false);
@@ -44,6 +45,7 @@ export function RegisterForm() {
                             id="firstName"
                             placeholder="Violet"
                             className="pr-9 text-secondary-foreground"
+                            aria-invalid={!!errors.firstName}
                             {...registerField("firstName")}
                         />
                     </div>
@@ -58,6 +60,7 @@ export function RegisterForm() {
                             id="lastName"
                             placeholder="Abdalla"
                             className="pr-9 text-secondary-foreground"
+                            aria-invalid={!!errors.lastName}
                             {...registerField("lastName")}
                         />
                     </div>
@@ -75,6 +78,7 @@ export function RegisterForm() {
                         type="email"
                         placeholder="correo@ejemplo.com"
                         className="pr-9 text-secondary-foreground"
+                        aria-invalid={!!errors.email}
                         {...registerField("email")}
                     />
                 </div>
@@ -91,6 +95,7 @@ export function RegisterForm() {
                         placeholder="12345678"
                         maxLength={8}
                         className="pr-9 text-secondary-foreground"
+                        aria-invalid={!!errors.dni}
                         {...registerField("dni")}
                     />
                 </div>
@@ -109,6 +114,7 @@ export function RegisterForm() {
                         placeholder="987654321"
                         maxLength={9}
                         className="pr-9 text-secondary-foreground"
+                        aria-invalid={!!errors.cellphone}
                         {...registerField("cellphone")}
                     />
                 </div>
@@ -124,6 +130,7 @@ export function RegisterForm() {
                         type={showPassword ? "text" : "password"}
                         placeholder="••••••••"
                         className="pr-10 text-secondary-foreground"
+                        aria-invalid={!!errors.password}
                         {...registerField("password")}
                     />
                     <button
@@ -146,6 +153,7 @@ export function RegisterForm() {
                         type={showConfirmPassword ? "text" : "password"}
                         placeholder="••••••••"
                         className="pr-10 text-secondary-foreground"
+                        aria-invalid={!!errors.confirmPassword}
                         {...registerField("confirmPassword")}
                     />
                     <button

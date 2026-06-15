@@ -43,6 +43,7 @@ export function LoginForm() {
                         type="email"
                         placeholder="correo@ejemplo.com"
                         {...register("email")}
+                        aria-invalid={!!errors.email}
                         className="text-secondary-foreground"
                     />
 
@@ -65,6 +66,7 @@ export function LoginForm() {
                         type={showPassword ? "text" : "password"}
                         placeholder="••••••••"
                         className="pr-10 text-secondary-foreground"
+                        aria-invalid={!!errors.password}
                         {...register("password")}
                     />
 
