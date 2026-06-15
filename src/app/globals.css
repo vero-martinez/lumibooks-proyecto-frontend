@@ -74,11 +74,11 @@
 :root {
   /* Fondo */
   --background: #f9f9f9; /* Fondo principal */
-  --secondary: #FBD9E5; /* Fondo secundario */
+  --secondary: #fbf4eb; /* Fondo secundario */
   --muted: #d9fbe0; /* Fondos discretos para estados suaves o secciones secundarias */
 
   /* texto */
-  --foreground: #e22573; /* Texto principal - titulos */
+  --foreground: #c43670; /* Texto principal - titulos */
   --secondary-foreground: #121212; /* Texto secundario */
   --muted-foreground: #6b7280; /* Textos secundarios y placeholders */
   --destructive: #e44444; /* Mensaje de error - validaciones */
@@ -92,16 +92,16 @@
   --popover-foreground: #C43670; /* Texto dentro de popovers */
 
   /* Button */
-  --primary: #e22573; /* Color del boton */
+  --primary: #c43670; /* Color del boton */
   --primary-foreground: #ffffff; /* Color del texto del botón */
 
   /* Border, Input, Ring */
   --border: #e22573; /* Borde de card */
-  --input: #e4d9fb; /* Borde del input */
+  --input: #fbd9e5; /* Borde del input */
   --ring: #e22573; /* Borde al dar click en input */
 
   /* Accent */
-  --accent: #F3CC97; /* Color para hover, destacados y elementos decorativos */
+  --accent: #f3cc97; /* Color para hover, destacados y elementos decorativos */
   --accent-foreground: #C43670; /* Texto sobre fondos accent */
 
   /* Border radius */
