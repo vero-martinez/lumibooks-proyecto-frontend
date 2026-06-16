@@ -2,17 +2,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { FaInstagram, FaFacebook, FaTiktok, FaWhatsapp, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaCcVisa, FaCcMastercard, FaCcDinersClub } from "react-icons/fa";
 import { SiAmericanexpress } from "react-icons/si";
+import { AppLink } from "@/components/shared/AppLink";
 
 export function Footer() {
     return (
         <footer className="w-full bg-foreground text-primary-foreground mt-auto ">
 
             {/* CONTENIDO PRINCIPAL */}
-            <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-4 gap-10 ">
+            <div className="max-w-7xl mx-auto px-14 py-10 grid grid-cols-1 md:grid-cols-4 gap-10 justify-items-center md:justify-items-start text-center md:text-left">
 
                 {/* COLUMNA LOGO E INFO */}
-                <div className="md:col-span-1 flex flex-col gap-4">
-                    <Link href="/" className="flex items-center gap-2">
+                <div className="md:col-span-1 flex flex-col gap-4 items-center md:items-start">
+                    <Link href="/" className="flex items-center gap-2 justify-center">
                         <span className="font-bold text-2xl">LumiBooks</span>
                     </Link>
 
@@ -22,19 +23,19 @@ export function Footer() {
 
                     {/* REDES SOCIALES */}
                     <div className="flex items-center gap-4 mt-2">
-                        <Link href="https://instagram.com" target="_blank" className="hover:text-accent transition-colors">
+                        <AppLink href="https://instagram.com">
                             <FaInstagram size={25} />
-                        </Link>
-                        <Link href="https://facebook.com" target="_blank" className="hover:text-accent transition-colors">
+                        </AppLink>
+                        <AppLink href="https://facebook.com">
                             <FaFacebook size={25} />
-                        </Link>
-                        <Link href="https://tiktok.com" target="_blank" className="hover:text-accent transition-colors">
+                        </AppLink>
+                        <AppLink href="https://tiktok.com">
                             <FaTiktok size={25} />
-                        </Link>
+                        </AppLink>
 
-                        <Link href="https://wa.me/51999999999" target="_blank" className="hover:text-accent transition-colors">
+                        <AppLink href="https://wa.me/51999999999">
                             <FaWhatsapp size={25} />
-                        </Link>
+                        </AppLink>
                     </div>
                 </div>
 
@@ -42,7 +43,7 @@ export function Footer() {
                 <div className="flex flex-col gap-3">
                     <h4 className="font-bold text-sm uppercase tracking-wider">Sobre Nosotros</h4>
                     <div className="flex flex-col gap-4 text-sm text-background">
-                        <Link href="/books" className="hover:text-accent hover:underline transition-colors">Quienes Somos</Link>
+                        <AppLink href="/books">Quienes Somos</AppLink>
                         <span className="flex items-start gap-2">
                             <FaMapMarkerAlt size={16} className="shrink-0 mt-0.5" />
                             Av. Ejemplo 123, Lima, Perú
@@ -62,11 +63,11 @@ export function Footer() {
                 <div className="flex flex-col gap-3">
                     <h4 className="font-bold text-sm uppercase tracking-wider">Categorías</h4>
                     <div className="flex flex-col gap-2 text-sm text-background">
-                        <Link href="/books" className="hover:text-accent hover:underline transition-colors">Infantil</Link>
-                        <Link href="/books" className="hover:text-accent hover:underline transition-colors">Juvenil</Link>
-                        <Link href="/books" className="hover:text-accent hover:underline transition-colors">Fantasía</Link>
-                        <Link href="/books" className="hover:text-accent hover:underline transition-colors">Romance</Link>
-                        <Link href="/books" className="hover:text-accent hover:underline transition-colors">Misterio</Link>
+                        <AppLink href="/books">Infantil</AppLink>
+                        <AppLink href="/books">Juvenil</AppLink>
+                        <AppLink href="/books">Fantasía</AppLink>
+                        <AppLink href="/books">Romance</AppLink>
+                        <AppLink href="/books">Misterio</AppLink>
 
                     </div>
                 </div>
@@ -75,16 +76,16 @@ export function Footer() {
                 <div className="flex flex-col gap-4">
                     <h4 className="font-bold text-sm uppercase tracking-wider">Políticas</h4>
                     <div className="flex flex-col gap-2 text-sm text-background">
-                        <Link href="/terms" className="hover:text-accent hover:underline transition-colors">Términos y condiciones</Link>
-                        <Link href="/privacy" className="hover:text-accent hover:underline transition-colors">Política de privacidad</Link>
+                        <AppLink href="/terms">Términos y condiciones</AppLink>
+                        <AppLink href="/privacy">Política de privacidad</AppLink>
                     </div>
 
                     <h4 className="font-bold text-sm uppercase tracking-wider">Métodos de Pago</h4>
-                    <div className="flex items-center gap-6 mt-1">
-                        <FaCcVisa size={25} />
-                        <FaCcMastercard size={25} />
-                        <SiAmericanexpress size={25} />
-                        <FaCcDinersClub size={25} />
+                    <div className="flex items-center gap-4 mt-1">
+                        <FaCcVisa size={22} />
+                        <FaCcMastercard size={22} />
+                        <SiAmericanexpress size={22} />
+                        <FaCcDinersClub size={23} />
                     </div>
                 </div>
 
@@ -92,11 +93,11 @@ export function Footer() {
 
             {/* LÍNEA Y COPYRIGHT */}
             <div className="border-t border-primary-foreground/20">
-                <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-2 text-sm text-background">
+                <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-center md:justify-between gap-4 text-sm text-background text-center md:text-left">
                     <span>© 2026 LumiBooks. Todos los derechos reservados.</span>
                     <div className="flex gap-4">
-                        <Link href="/terms" className="hover:text-accent hover:underline transition-colors">Términos</Link>
-                        <Link href="/privacy" className="hover:text-accent hover:underline transition-colors">Privacidad</Link>
+                        <AppLink href="/terms" >Términos</AppLink>
+                        <AppLink href="/privacy">Privacidad</AppLink>
                     </div>
                 </div>
             </div>

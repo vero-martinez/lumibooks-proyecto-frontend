@@ -1,58 +1,74 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { ShoppingCart, Heart, User, Search } from "lucide-react";
 import Image from "next/image";
+import { FaShoppingCart, FaHeart, FaUser } from "react-icons/fa";
+import { IoMdCloseCircle } from "react-icons/io";
+import { TiThMenu } from "react-icons/ti";
+import { IconButton } from "@/components/shared/IconButton";
+import { SearchBar } from "@/components/shared/SearchBar";
 
 export function Navbar() {
+    const [menuOpen, setMenuOpen] = useState(false);
+
     return (
-        <header className="sticky top-0 z-50 w-full bg-foreground py-4 shadow-lg">
+        <header className="sticky top-0 z-50 w-full bg-foreground px-6 py-4 shadow-lg">
             <div className="max-w-7xl mx-auto flex items-center gap-12">
 
+                
                 {/* LOGO */}
-                <Link href="/" className="flex items-center gap-2 shrink-0">
+                <Link href="/" className="flex items-center gap-4 shrink-0">
                     <Image src="/logo.svg" alt="LumiBooks" width={85} height={85} />
                     <span className="font-bold text-background text-2xl">LumiBooks</span>
                 </Link>
 
-                {/* BARRA DE BÚSQUEDA */}
-                <div className="flex-1 max-w-xl flex items-center rounded-full bg-background overflow-hidden">
-                    <input
-                        type="text"
-                        placeholder="Buscar por título, autor o ISBN"
-                        className="flex-1 px-4 py-2 text-sm text-secondary-foreground placeholder:text-muted-foreground bg-transparent outline-none"
-                    />
-                    <button className="px-4 py-3 h-full bg-accent text-foreground flex items-center justify-center hover:bg-accent/80 transition-colors">
-                        <Search size={22} />
-                    </button>
+                {/* BARRA DE BÚSQUEDA — oculta en mobile */}
+                <div className="hidden lg:flex flex-1 max-w-xl">
+                    <SearchBar />
                 </div>
 
-                {/* ICONOS Y BOTÓN */}
-                <div className="flex items-center gap-6 shrink-0">
+                {/* ICONOS — ocultos en mobile */}
+                <div className="hidden lg:flex items-center gap-6 shrink-0">
+                    <IconButton href="/cart" icon={FaShoppingCart} label="Carrito" />
+                    <IconButton href="/cliente/wishlist" icon={FaHeart} label="Favoritos" />
 
-                    {/* CARRITO */}
-                    <Link href="/cart" className="w-11 h-11 rounded-full bg-accent flex items-center justify-center text-foreground hover:bg-accent transition-colors">
-                        <ShoppingCart size={22} />
-                    </Link>
-
-                    {/* FAVORITOS */}
-                    <Link href="/cliente/wishlist" className="w-11 h-11 rounded-full bg-accent flex items-center justify-center text-foreground hover:bg-accent transition-colors">
-                        <Heart size={22} />
-                    </Link>
-
-                    {/* INICIAR SESIÓN */}
                     <Link href="/login" className="flex flex-col items-start justify-center hover:opacity-80 transition-opacity">
                         <span className="font-bold text-primary-foreground">¡Hola!</span>
                         <span className="text-sm font-bold text-primary-foreground">Iniciar Sesión</span>
                     </Link>
 
-                    {/* USUARIO */}
-                    <div className="w-11 h-11 rounded-full bg-accent flex items-center justify-center text-foreground hover:bg-accent transition-colors cursor-pointer">
-                        <User size={22} />
+                    <IconButton icon={FaUser} label="Usuario" />
+                </div>
+
+                {/* HAMBURGUESA — solo en mobile */}
+                <button
+                    className="lg:hidden ml-auto text-background"
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    aria-label="Menú"
+                >
+                    {menuOpen ? <IoMdCloseCircle size={28} /> : <TiThMenu size={28} />}
+                </button>
+
+            </div>
+
+            {/* MENÚ MOBILE */}
+            {menuOpen && (
+                <div className="lg:hidden bg-foreground px-6 py-6 flex flex-col gap-6 border-t border-primary-foreground/20">
+                    <SearchBar />
+                    <div className="flex flex-col gap-4 text-background">
+                        <Link href="/cart" className="flex items-center gap-3 hover:opacity-80" onClick={() => setMenuOpen(false)}>
+                            <FaShoppingCart size={20} /><span className="text-sm font-medium">Carrito</span>
+                        </Link>
+                        <Link href="/cliente/wishlist" className="flex items-center gap-3 hover:opacity-80" onClick={() => setMenuOpen(false)}>
+                            <FaHeart size={20} /><span className="text-sm font-medium">Favoritos</span>
+                        </Link>
+                        <Link href="/login" className="flex items-center gap-3 hover:opacity-80" onClick={() => setMenuOpen(false)}>
+                            <FaUser size={20} /><span className="text-sm font-medium">Iniciar Sesión</span>
+                        </Link>
                     </div>
                 </div>
-                
-            </div>
+            )}
         </header>
     );
 }
