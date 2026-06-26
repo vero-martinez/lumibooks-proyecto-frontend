@@ -13,8 +13,9 @@ import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useBookSuggestions } from "@/features/books/hooks/useBookSuggestions";
 import { useDebounce } from "@/hooks/useDebounce";
-import { slugify } from "@/lib/utils";
 import { MIN_SEARCH_LENGTH } from "@/features/books/constants/filters.constants";
+import { buildBookDetailUrl } from "@/features/books/utils/buildBookDetailUrl";
+
 
 const BOOKS_PATH = "/books";
 const SEARCH_DEBOUNCE_MS = 400;
@@ -39,7 +40,7 @@ export function useBookSearchBar() {
     (id: number, title: string) => {
       setIsOpen(false);
       setQuery("");
-      router.push(`${BOOKS_PATH}/${slugify(title)}/${id}`);
+      router.push(buildBookDetailUrl(id, title));
     },
     [router],
   );
