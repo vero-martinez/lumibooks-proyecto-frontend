@@ -74,8 +74,8 @@
 :root {
   /* Fondo */
   --background: #f9f9f9; /* Fondo principal */
-  --secondary: #fbf4eb; /* Fondo secundario */
-  --muted: #d9fbe0; /* Fondos discretos para estados suaves o secciones secundarias */
+  --secondary: #f8ecf0; /* Fondo secundario */
+  --muted: #ece8e8; /* Fondos discretos para estados suaves o secciones secundarias */
 
   /* texto */
   --foreground: #c43670; /* Texto principal - titulos */
@@ -84,7 +84,7 @@
   --destructive: #e44444; /* Mensaje de error - validaciones */
 
   /* Card */
-  --card: #ebfbee; /* Fondo de tarjetas */
+  --card: #f8ebee; /* Fondo de tarjetas */
   --card-foreground: #121212; /* Texto dentro de tarjetas */
 
   /* Popover */
@@ -152,4 +152,6 @@
   html {
     @apply font-sans;
   }
+
+  
 }
