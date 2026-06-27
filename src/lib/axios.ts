@@ -1,12 +1,14 @@
 /**
  * Instancia base de Axios para comunicación con el backend Spring Boot.
- * Incluye interceptores para agregar el token JWT automáticamente
- * en cada request y manejar errores de autenticación globalmente.
+ * Incluye interceptores para:
+ * - Agregar automáticamente el token JWT en cada request.
+ * - Manejar errores de autenticación (401).
+ * - Normalizar los mensajes de error del backend.
  */
-
 import axios from "axios";
 import { useAuthStore } from "@/stores/auth.store";
 
+// Instancia centralizada de Axios para comunicación con el backend Spring Boot.
 const api = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL,
     headers: {
@@ -14,7 +16,10 @@ const api = axios.create({
     },
 });
 
-// Agrega el token JWT automáticamente en cada request
+/**
+ * Interceptor de requests:
+ * Agrega automáticamente el token JWT en cada petición si existe sesión activa.
+ */
 api.interceptors.request.use((config) => {
     const token = useAuthStore.getState().token;
     if (token) {
@@ -23,15 +28,31 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-// Si el token expira o es inválido, redirige al login
+/**
+ * Interceptor de responses:
+ * - Maneja errores de autenticación (401) cerrando sesión automáticamente.
+ * - Normaliza los mensajes de error para toda la aplicación.
+ */
 api.interceptors.response.use(
     (response) => response,
     (error) => {
+
+        // Si el token expiró o es inválido, se cierra sesión
         if (error.response?.status === 401) {
             useAuthStore.getState().logout();
             window.location.href = "/login";
         }
+        
+        // Normalización del mensaje de error del backend
+        const message =
+            error.response?.data?.message ??
+            error.response?.data?.error ??
+            error.message ??
+            "Error inesperado";
+
+        error.message = message;
         return Promise.reject(error);
+
     }
 );
 

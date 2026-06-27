@@ -16,3 +16,14 @@ export interface AuthResponse {
     role: Role;
     message: string;
 }
+
+// Respuesta paginada de Spring Boot
+export interface PageResponse<T> {
+    content: T[];
+    totalPages: number;
+    totalElements: number;
+    number: number;
+    size: number;
+    first: boolean;
+    last: boolean;
+}
