@@ -1,28 +1,31 @@
-import { ButtonHTMLAttributes } from "react";
+/**
+ * Botón circular con un ícono centrado.
+ * Usado para acciones rápidas: carrito, favoritos, menú de usuario, etc.
+ *
+ * Acepta cualquier prop nativa de <button> (onClick, disabled, type, etc.)
+ * gracias a ButtonHTMLAttributes.
+ */
+import { memo, ButtonHTMLAttributes } from "react";
 import { IconType } from "react-icons";
 import { cn } from "@/lib/utils";
 
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon: IconType;
+  /** Texto descriptivo para screen readers (aria-label) */
   label: string;
   size?: "sm" | "md" | "lg";
 }
 
-// Tamaño del botón (contenedor) y del ícono interno, por variante.
-const SIZE_STYLES: Record<NonNullable<IconButtonProps["size"]>, { button: string; icon: number }> = {
+const SIZE_STYLES: Record<
+  NonNullable<IconButtonProps["size"]>,
+  { button: string; icon: number }
+> = {
   sm: { button: "w-9 h-9", icon: 18 },
   md: { button: "w-11 h-11", icon: 22 },
   lg: { button: "w-14 h-14", icon: 28 },
 };
 
-/**
- * Botón circular con un ícono centrado.
- * Usado para acciones rápidas como carrito, favoritos, usuario, etc.
- *
- * Acepta cualquier prop nativa de <button> (onClick, disabled, type, etc.)
- * gracias a ButtonHTMLAttributes — no es necesario declararlas una por una.
- */
-export function IconButton({
+export const IconButton = memo(function IconButton({
   icon: Icon,
   label,
   size = "md",
@@ -39,9 +42,10 @@ export function IconButton({
       aria-label={label}
       disabled={disabled}
       className={cn(
-        "rounded-full bg-accent flex items-center justify-center text-foreground transition-colors",
-        "hover:bg-accent/70",
-        "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-accent",
+        "rounded-full bg-accent flex items-center justify-center text-foreground transition-all",
+        "hover:bg-accent/70 active:scale-95",
+        "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none",
+        "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-accent disabled:active:scale-100",
         buttonSize,
         className,
       )}
@@ -50,4 +54,4 @@ export function IconButton({
       <Icon size={iconSize} />
     </button>
   );
-}
+});
