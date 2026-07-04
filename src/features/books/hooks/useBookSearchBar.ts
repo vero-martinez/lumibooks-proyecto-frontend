@@ -1,19 +1,18 @@
 /**
  * useBookSearchBar
- * Centraliza el estado y la lógica de la barra de búsqueda global:
- * input, debounce, sugerencias en tiempo real, navegación al detalle
- * de un libro y navegación al catálogo filtrado por texto.
  *
- * Es independiente de useBookFiltersUrl a propósito: este hook se monta
- * en el navbar (visible en cualquier página), mientras que useBookFiltersUrl
- * vive únicamente en BooksPage y asume que la ruta actual ya es /books.
+ * Estado y lógica de la barra de búsqueda global: input, debounce, sugerencias
+ * en tiempo real y navegación (detalle de libro / catálogo filtrado).
+ *
+ * Este hook se monta en el navbar (visible en cualquier página), mientras que
+ * los filtros de URL solo existen en /books.
  */
 
 import { useCallback, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useBookSuggestions } from "@/features/books/hooks/useBookSuggestions";
 import { useDebounce } from "@/hooks/useDebounce";
-import { MIN_SEARCH_LENGTH } from "@/features/books/constants/filters.constants";
+import { MIN_SEARCH_LENGTH } from "@/features/books/constants/catalog.constants";
 import { buildBookDetailUrl } from "@/features/books/utils/buildBookDetailUrl";
 
 
@@ -29,13 +28,9 @@ export function useBookSearchBar() {
   const debouncedQuery = useDebounce(query, SEARCH_DEBOUNCE_MS);
   const { data: suggestions = [], isFetching } = useBookSuggestions(debouncedQuery);
 
-  // El dropdown solo se muestra si está abierto Y el texto (ya debounced)
-  // alcanza la longitud mínima de búsqueda — evita parpadeos mientras se escribe.
   const showDropdown = isOpen && debouncedQuery.trim().length >= MIN_SEARCH_LENGTH;
 
-  // Navega al detalle del libro seleccionado desde el dropdown.
-  // Cierra el dropdown y limpia el input para dejar la barra lista
-  // para una nueva búsqueda una vez que el usuario llega al detalle.
+  /** Navega al detalle del libro y limpia la búsqueda. */
   const goToDetail = useCallback(
     (id: number, title: string) => {
       setIsOpen(false);
@@ -45,8 +40,7 @@ export function useBookSearchBar() {
     [router],
   );
 
-  // Navega al catálogo filtrado por el texto recibido — usado tanto en el
-  // submit del form como en el botón "ver todos los resultados" del dropdown.
+  /** Navega al catálogo filtrado por el texto ingresado. */
   const goToCatalog = useCallback(
     (rawQuery: string) => {
       const trimmed = rawQuery.trim();
@@ -59,8 +53,7 @@ export function useBookSearchBar() {
     [router],
   );
 
-  // Handler del submit del <form> (Enter o click en el botón de búsqueda).
-  // Evita el reload por defecto del navegador y navega al catálogo.
+  /** Submit del form: evita reload y va al catálogo. */
   const handleSubmit = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
@@ -69,24 +62,18 @@ export function useBookSearchBar() {
     [goToCatalog, query],
   );
 
-  // Handler del onChange del input. Actualiza el texto en cada tecla
-  // y marca el dropdown como "abierto" — su visibilidad real depende
-  // además de showDropdown, que valida la longitud mínima de búsqueda.
+  /** Actualiza el input y abre el dropdown. */
   const handleChange = useCallback((value: string) => {
     setQuery(value);
     setIsOpen(true);
   }, []);
 
-  // Handler del onFocus del input. Si el usuario vuelve a enfocar la barra
-  // (por ejemplo, después de haber cerrado el dropdown con un click afuera)
-  // y ya hay sugerencias en cache de una búsqueda previa, reabre el dropdown
-  // sin que el usuario tenga que volver a escribir.
+  /** Reabre el dropdown al enfocar si hay sugerencias cacheadas. */
   const handleFocus = useCallback(() => {
     setIsOpen((prev) => prev || suggestions.length > 0);
   }, [suggestions.length]);
 
-  // Cierra el dropdown. Usado por el componente en el listener de
-  // "click fuera del contenedor" para ocultar las sugerencias.
+  /** Cierra el dropdown. */
   const close = useCallback(() => setIsOpen(false), []);
 
   return {
