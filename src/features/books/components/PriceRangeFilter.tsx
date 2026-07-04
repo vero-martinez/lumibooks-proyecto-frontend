@@ -1,9 +1,14 @@
+/**
+ * Filtro de rango de precio con slider dual.
+ * Muestra los valores mínimo y máximo seleccionados y un botón "Aplicar".
+ */
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import {
   DEFAULT_PRICE_RANGE,
   PRICE_STEP,
-} from "@/features/books/constants/filters.constants";
+} from "@/features/books/constants/catalog.constants";
+import { formatPrice } from "@/lib/utils";
 
 interface PriceRangeFilterProps {
   value: [number, number];
@@ -11,21 +16,29 @@ interface PriceRangeFilterProps {
   onApply: () => void;
 }
 
-export function PriceRangeFilter({ value, onChange, onApply }: PriceRangeFilterProps) {
+export function PriceRangeFilter({
+  value,
+  onChange,
+  onApply,
+}: PriceRangeFilterProps) {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h3 className="text-sm font-semibold text-secondary-foreground">Precio</h3>
-        <p className="text-xs text-muted-foreground mt-0.5">Selecciona un rango de precio</p>
+        <h3 className="text-sm font-semibold text-secondary-foreground">
+          Precio
+        </h3>
+        <p className="text-xs text-muted-foreground mt-0.5">
+          Selecciona un rango de precio
+        </p>
       </div>
 
       <div className="flex items-center justify-between gap-3">
         <span className="min-w-[50px] text-xs font-medium text-foreground bg-secondary rounded-md px-2 py-1 text-center">
-          S/ {value[0]}
+          {formatPrice(value[0], 0)}
         </span>
         <span className="text-xs text-muted-foreground">—</span>
         <span className="min-w-[50px] text-xs font-medium text-foreground bg-secondary rounded-md px-2 py-1 text-center">
-          S/ {value[1]}
+          {formatPrice(value[1], 0)}
         </span>
       </div>
 
