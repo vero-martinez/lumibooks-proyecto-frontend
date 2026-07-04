@@ -51,7 +51,7 @@ export const IconButton = memo(function IconButton({
       )}
       {...rest}
     >
-      <Icon size={iconSize} />
+      <Icon size={iconSize} aria-hidden="true" />
     </button>
   );
 });

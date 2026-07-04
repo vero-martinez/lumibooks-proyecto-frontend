@@ -23,6 +23,7 @@ export function IconInput({ icon: Icon, iconSize = 16, className, style, ...prop
       <Icon
         size={iconSize}
         className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-foreground"
+        aria-hidden="true"
       />
       <Input
         className={cn("text-secondary-foreground", className)}

@@ -24,7 +24,7 @@ export function ClearSearchButton({
       className="flex items-center gap-1.5 rounded-full bg-muted/50 px-3 py-1 text-sm text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
       aria-label={label}
     >
-      <IoClose size={14} />
+      <IoClose size={14} aria-hidden="true" />
       {label}
     </button>
   );
