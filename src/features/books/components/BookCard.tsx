@@ -1,4 +1,8 @@
-/* components/features/books/BookCard.tsx */
+/**
+ * Tarjeta individual de libro.
+ * Muestra portada, título, autores, rating, precio y acciones rápidas (carrito, favoritos).
+ * Optimizada con memo y priority para LCP.
+ */
 import Link from "next/link";
 import Image from "next/image";
 import { memo } from "react";
@@ -7,6 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { BookCard as BookCardType } from "@/features/books/types";
 import { IconButton } from "@/components/shared/IconButton";
 import { buildBookDetailUrl } from "@/features/books/utils/buildBookDetailUrl";
+import { formatPrice } from "@/lib/utils";
 
 interface BookCardProps {
   book: BookCardType;
@@ -70,7 +75,7 @@ export const BookCard = memo(function BookCard({
 
             {/* Precio */}
             <p className="text-xs md:text-sm font-bold text-foreground">
-              S/ {book.price.toFixed(2)}
+              {formatPrice(book.price)}
             </p>
           </div>
         </Link>
