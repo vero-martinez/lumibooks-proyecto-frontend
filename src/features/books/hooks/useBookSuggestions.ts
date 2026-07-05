@@ -1,14 +1,11 @@
 /**
- * useBookSuggestions
- * Hook que obtiene sugerencias de libros en tiempo real (autocompletado).
- * Usado en la barra de búsqueda del navbar.
- * No se ejecuta hasta que el usuario escriba el mínimo de caracteres,
- * y mantiene cache de 30s para evitar refetch innecesario.
+ * Hook de TanStack Query para sugerencias de búsqueda en tiempo real.
+ * Solo se activa cuando el texto ingresado alcanza MIN_SEARCH_LENGTH.
+ * Cachea las sugerencias por 30 segundos para evitar llamadas repetitivas mientras se escribe.
  */
-
 import { useQuery } from "@tanstack/react-query";
 import { getBookSuggestionsService } from "@/features/books/services";
-import { MIN_SEARCH_LENGTH } from "@/features/books/constants/filters.constants";
+import { MIN_SEARCH_LENGTH } from "@/features/books/constants/catalog.constants";
 
 export function useBookSuggestions(search: string) {
   const trimmed = search.trim();

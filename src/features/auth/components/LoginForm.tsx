@@ -1,21 +1,19 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Mail, Loader2 } from "lucide-react";
+import { FaEnvelope } from "react-icons/fa";
 import Link from "next/link";
 
 import { loginSchema, LoginSchema } from "@/features/auth/schemas";
 import { useLogin } from "@/features/auth/hooks";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
-import { Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { FormField } from "@/components/shared/FormField";
+import { IconInput } from "@/components/shared/IconInput";
+import { PasswordInput } from "@/components/shared/PasswordInput";
+import { LoadingButton } from "@/components/shared/LoadingButton";
 
 export function LoginForm() {
-    const [showPassword, setShowPassword] = useState(false);
     const { mutate: login, isPending } = useLogin();
 
     const {
@@ -33,73 +31,36 @@ export function LoginForm() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
-            {/* EMAIL */}
-            <Field data-invalid={!!errors.email}>
-                <FieldLabel htmlFor="email">Correo electrónico</FieldLabel>
+            <FormField label="Correo electrónico" name="email" error={errors.email}>
+                <IconInput
+                    icon={FaEnvelope}
+                    iconSize={18}
+                    id="email"
+                    type="email"
+                    placeholder="correo@ejemplo.com"
+                    aria-invalid={!!errors.email}
+                    {...register("email")}
+                />
+            </FormField>
 
-                <div className="relative">
-                    <Input
-                        id="email"
-                        type="email"
-                        placeholder="correo@ejemplo.com"
-                        {...register("email")}
-                        aria-invalid={!!errors.email}
-                        className="text-secondary-foreground"
-                    />
+            <FormField label="Contraseña" name="password" error={errors.password}>
+                <PasswordInput
+                    id="password"
+                    aria-invalid={!!errors.password}
+                    {...register("password")}
+                />
+            </FormField>
 
-                    <Mail
-                        size={18}
-                        className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-foreground"
-                    />
-                </div>
-
-                {errors.email && <FieldError errors={[errors.email]} />}
-            </Field>
-
-            {/* PASSWORD */}
-            <Field data-invalid={!!errors.password}>
-                <FieldLabel htmlFor="password">Contraseña</FieldLabel>
-
-                <div className="relative">
-                    <Input
-                        id="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        className="pr-10 text-secondary-foreground"
-                        aria-invalid={!!errors.password}
-                        {...register("password")}
-                    />
-
-                    <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground"
-                    >
-                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                </div>
-
-                {errors.password && <FieldError errors={[errors.password]} />}
-            </Field>
-
-            {/* BUTTON */}
-            <Button
+            <LoadingButton
                 type="submit"
                 size="lg"
                 className="w-full h-12"
-                disabled={isPending}
+                loading={isPending}
+                loadingText="Iniciando Sesión..."
             >
-                {isPending ? (
-                    <>
-                        <Loader2 size={18} className="animate-spin" />
-                        Iniciando Sesión...
-                    </>
-                ) : (
-                    "Iniciar Sesión"
-                )}
-            </Button>
+                Iniciar Sesión
+            </LoadingButton>
 
-            {/* REGISTER LINK */}
             <p className="text-sm text-center text-muted-foreground">
                 ¿No tienes una cuenta?{" "}
                 <Link

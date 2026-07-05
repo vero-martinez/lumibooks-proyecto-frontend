@@ -6,6 +6,7 @@
 
 import { NextResponse } from "next/server";
 import { AuthResponse } from "@/types/api.types";
+import { env } from "@/lib/env";
 
 export async function handleAuthRequest(
     endpoint: string,
@@ -13,7 +14,7 @@ export async function handleAuthRequest(
 ): Promise<NextResponse> {
     try {
         const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`,
+            `${env.apiUrl}${endpoint}`,
             {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },

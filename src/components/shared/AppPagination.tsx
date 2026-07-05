@@ -1,7 +1,14 @@
 /**
  * Componente de paginación reutilizable.
- * Se usa en cualquier listado paginado de la app (libros, usuarios, pedidos, etc.).
- * Cuando hay muchas páginas, muestra "..." para evitar llenar la pantalla de botones.
+ * Se usa en cualquier listado paginado de la app (libros, autores, etc.).
+ *
+ * Las páginas se manejan internamente como 0-indexed (0 = primera página),
+ * pero se muestran al usuario como 1-indexed (1, 2, 3...).
+ *
+ * Comportamiento:
+ * - Si totalPages <= 1, no renderiza nada.
+ * - Si hay muchas páginas, muestra primera, última, vecinas de la actual y "..." en medio.
+ * - Previous/Next se deshabilitan (aria-disabled + tabIndex=-1) en extremos.
  */
 import { useMemo, useCallback } from "react";
 import {
@@ -20,34 +27,31 @@ interface AppPaginationProps {
   totalPages: number;
   isFirst: boolean;
   isLast: boolean;
+  /** Callback al cambiar de página. Recibe la página (0-indexed) */
   onPageChange: (page: number) => void;
   className?: string;
 }
 
-// Cantidad máxima de botones numéricos visibles antes de mostrar "...".
-const MAX_VISIBLE_PAGES = 5;
+/** Controla cuántos vecinos mostrar a cada lado de la página actual */
+const SIDE_NEIGHBORS = 1;
 
-// Cantidad de páginas "vecinas" mostradas a cada lado de la página actual,
-// derivada de MAX_VISIBLE_PAGES (resta primera y última página fijas).
-const SIDE_NEIGHBORS = Math.floor((MAX_VISIBLE_PAGES - 2) / 2);
-
-/**
- * Genera la lista de páginas que se mostrarán en la paginación,
- * incluyendo "ellipsis" donde haya tramos ocultos.
+/** Genera el arreglo de páginas a mostrar.
+ * Siempre incluye primera y última página, inserta "ellipsis" si es necesario.
  */
 function getPageNumbers(
   currentPage: number,
   totalPages: number,
 ): (number | "ellipsis")[] {
-  // Si hay pocas páginas, se muestran todas sin elipsis.
-  if (totalPages <= MAX_VISIBLE_PAGES) {
+  const neighborCount = SIDE_NEIGHBORS;
+
+  if (totalPages <= 3 + neighborCount * 2) {
     return Array.from({ length: totalPages }, (_, i) => i);
   }
 
   const pages: (number | "ellipsis")[] = [0];
 
-  const start = Math.max(1, currentPage - SIDE_NEIGHBORS);
-  const end = Math.min(totalPages - 2, currentPage + SIDE_NEIGHBORS);
+  const start = Math.max(1, currentPage - neighborCount);
+  const end = Math.min(totalPages - 2, currentPage + neighborCount);
 
   if (start > 1) pages.push("ellipsis");
 
@@ -62,10 +66,6 @@ function getPageNumbers(
   return pages;
 }
 
-/**
- * Renderiza la paginación y notifica al componente padre
- * cuando el usuario cambia de página.
- */
 export function AppPagination({
   currentPage,
   totalPages,
@@ -74,14 +74,11 @@ export function AppPagination({
   onPageChange,
   className,
 }: AppPaginationProps) {
-  // Memoriza las páginas visibles para no recalcularlas en cada render.
   const pageNumbers = useMemo(
     () => getPageNumbers(currentPage, totalPages),
     [currentPage, totalPages],
   );
 
-  // Centraliza el preventDefault de los <a href="#">, que shadcn/ui
-  // requiere para que los componentes de paginación se rendericen como link.
   const handleNavigate = useCallback(
     (e: React.MouseEvent, page: number) => {
       e.preventDefault();
@@ -90,22 +87,25 @@ export function AppPagination({
     [onPageChange],
   );
 
-  // Si solo existe una página, no tiene sentido mostrar paginación.
   if (totalPages <= 1) return null;
 
   return (
     <Pagination className={cn("mt-5", className)}>
       <PaginationContent>
-        {/* Botón para ir a la página anterior */}
         <PaginationItem>
           <PaginationPrevious
             href="#"
+            aria-label="Ir a página anterior"
+            aria-disabled={isFirst || undefined}
+            tabIndex={isFirst ? -1 : undefined}
             onClick={(e) => !isFirst && handleNavigate(e, currentPage - 1)}
-            className={cn(isFirst && "pointer-events-none opacity-50")}
+            className={cn(
+              "transition-opacity",
+              isFirst ? "opacity-40 cursor-default" : "hover:opacity-80",
+            )}
           />
         </PaginationItem>
 
-        {/* Botones numéricos y elipsis */}
         {pageNumbers.map((page, idx) =>
           page === "ellipsis" ? (
             <PaginationItem key={`ellipsis-${idx}`}>
@@ -118,25 +118,29 @@ export function AppPagination({
                 isActive={currentPage === page}
                 onClick={(e) => handleNavigate(e, page)}
                 className={cn(
-                  "border",
+                  "border transition-all duration-150",
                   currentPage === page
-                    ? "bg-primary text-primary-foreground border-primary"
-                    : "border-primary bg-accent/70",
+                    ? "bg-primary text-primary-foreground border-primary shadow-sm scale-105 cursor-default"
+                    : "border-primary bg-accent/70 hover:bg-accent cursor-pointer",
                 )}
               >
-                {/* Se muestra 1,2,3... pero internamente se usa 0,1,2... */}
                 {page + 1}
               </PaginationLink>
             </PaginationItem>
           ),
         )}
 
-        {/* Botón para ir a la siguiente página */}
         <PaginationItem>
           <PaginationNext
             href="#"
+            aria-label="Ir a página siguiente"
+            aria-disabled={isLast || undefined}
+            tabIndex={isLast ? -1 : undefined}
             onClick={(e) => !isLast && handleNavigate(e, currentPage + 1)}
-            className={cn(isLast && "pointer-events-none opacity-50")}
+            className={cn(
+              "transition-opacity",
+              isLast ? "opacity-40 cursor-default" : "hover:opacity-80",
+            )}
           />
         </PaginationItem>
       </PaginationContent>

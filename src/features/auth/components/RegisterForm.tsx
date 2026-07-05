@@ -1,22 +1,20 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, User, Mail, CreditCard, Phone, Loader2 } from "lucide-react";
+import { FaUser, FaEnvelope, FaCreditCard, FaPhone } from "react-icons/fa";
 import Link from "next/link";
 
 import { registerSchema, RegisterSchema } from "@/features/auth/schemas";
 import { useRegister } from "@/features/auth/hooks";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Field, FieldLabel, FieldError } from "@/components/ui/field";
-import { error } from "console";
+import { Field, FieldError } from "@/components/ui/field";
+import { FormField } from "@/components/shared/FormField";
+import { IconInput } from "@/components/shared/IconInput";
+import { PasswordInput } from "@/components/shared/PasswordInput";
+import { LoadingButton } from "@/components/shared/LoadingButton";
 
 export function RegisterForm() {
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const { mutate: register, isPending } = useRegister();
 
     const {
@@ -34,140 +32,85 @@ export function RegisterForm() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
-
-            {/* NOMBRE Y APELLIDO */}
             <div className="grid grid-cols-2 gap-4">
-                <Field data-invalid={!!errors.firstName}>
-                    <FieldLabel htmlFor="firstName">Nombre</FieldLabel>
-                    <div className="relative">
-                        <User size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground" />
-                        <Input
-                            id="firstName"
-                            placeholder="Violet"
-                            className="pr-9 text-secondary-foreground"
-                            aria-invalid={!!errors.firstName}
-                            {...registerField("firstName")}
-                        />
-                    </div>
-                    {errors.firstName && <FieldError errors={[errors.firstName]} />}
-                </Field>
+                <FormField label="Nombre" name="firstName" error={errors.firstName}>
+                    <IconInput
+                        icon={FaUser}
+                        id="firstName"
+                        placeholder="Violet"
+                        aria-invalid={!!errors.firstName}
+                        {...registerField("firstName")}
+                    />
+                </FormField>
 
-                <Field data-invalid={!!errors.lastName}>
-                    <FieldLabel htmlFor="lastName">Apellido</FieldLabel>
-                    <div className="relative">
-                        <User size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground" />
-                        <Input
-                            id="lastName"
-                            placeholder="Abdalla"
-                            className="pr-9 text-secondary-foreground"
-                            aria-invalid={!!errors.lastName}
-                            {...registerField("lastName")}
-                        />
-                    </div>
-                    {errors.lastName && <FieldError errors={[errors.lastName]} />}
-                </Field>
+                <FormField label="Apellido" name="lastName" error={errors.lastName}>
+                    <IconInput
+                        icon={FaUser}
+                        id="lastName"
+                        placeholder="Abdalla"
+                        aria-invalid={!!errors.lastName}
+                        {...registerField("lastName")}
+                    />
+                </FormField>
             </div>
 
-            {/* EMAIL */}
-            <Field data-invalid={!!errors.email}>
-                <FieldLabel htmlFor="email">Correo electrónico</FieldLabel>
-                <div className="relative">
-                    <Mail size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground" />
-                    <Input
-                        id="email"
-                        type="email"
-                        placeholder="correo@ejemplo.com"
-                        className="pr-9 text-secondary-foreground"
-                        aria-invalid={!!errors.email}
-                        {...registerField("email")}
-                    />
-                </div>
-                {errors.email && <FieldError errors={[errors.email]} />}
-            </Field>
+            <FormField label="Correo electrónico" name="email" error={errors.email}>
+                <IconInput
+                    icon={FaEnvelope}
+                    id="email"
+                    type="email"
+                    placeholder="correo@ejemplo.com"
+                    aria-invalid={!!errors.email}
+                    {...registerField("email")}
+                />
+            </FormField>
 
-            {/* DNI */}
-            <Field data-invalid={!!errors.dni}>
-                <FieldLabel htmlFor="dni">DNI</FieldLabel>
-                <div className="relative">
-                    <CreditCard size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground" />
-                    <Input
-                        id="dni"
-                        placeholder="12345678"
-                        maxLength={8}
-                        className="pr-9 text-secondary-foreground"
-                        aria-invalid={!!errors.dni}
-                        {...registerField("dni")}
-                    />
-                </div>
-                {errors.dni && <FieldError errors={[errors.dni]} />}
-            </Field>
+            <FormField label="DNI" name="dni" error={errors.dni}>
+                <IconInput
+                    icon={FaCreditCard}
+                    id="dni"
+                    placeholder="12345678"
+                    maxLength={8}
+                    aria-invalid={!!errors.dni}
+                    {...registerField("dni")}
+                />
+            </FormField>
 
-            {/* CELULAR */}
-            <Field data-invalid={!!errors.cellphone}>
-                <FieldLabel htmlFor="cellphone">
-                    Celular <span className="text-muted-foreground text-xs">(opcional)</span>
-                </FieldLabel>
-                <div className="relative">
-                    <Phone size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground" />
-                    <Input
-                        id="cellphone"
-                        placeholder="987654321"
-                        maxLength={9}
-                        className="pr-9 text-secondary-foreground"
-                        aria-invalid={!!errors.cellphone}
-                        {...registerField("cellphone")}
-                    />
-                </div>
-                {errors.cellphone && <FieldError errors={[errors.cellphone]} />}
-            </Field>
+            <FormField
+                label={
+                    <>
+                        Celular <span className="text-muted-foreground text-xs">(opcional)</span>
+                    </>
+                }
+                name="cellphone"
+                error={errors.cellphone}
+            >
+                <IconInput
+                    icon={FaPhone}
+                    id="cellphone"
+                    placeholder="987654321"
+                    maxLength={9}
+                    aria-invalid={!!errors.cellphone}
+                    {...registerField("cellphone")}
+                />
+            </FormField>
 
-            {/* CONTRASEÑA */}
-            <Field data-invalid={!!errors.password}>
-                <FieldLabel htmlFor="password">Contraseña</FieldLabel>
-                <div className="relative">
-                    <Input
-                        id="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        className="pr-10 text-secondary-foreground"
-                        aria-invalid={!!errors.password}
-                        {...registerField("password")}
-                    />
-                    <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground"
-                    >
-                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                </div>
-                {errors.password && <FieldError errors={[errors.password]} />}
-            </Field>
+            <FormField label="Contraseña" name="password" error={errors.password}>
+                <PasswordInput
+                    id="password"
+                    aria-invalid={!!errors.password}
+                    {...registerField("password")}
+                />
+            </FormField>
 
-            {/* CONFIRMAR CONTRASEÑA */}
-            <Field data-invalid={!!errors.confirmPassword}>
-                <FieldLabel htmlFor="confirmPassword">Confirmar contraseña</FieldLabel>
-                <div className="relative">
-                    <Input
-                        id="confirmPassword"
-                        type={showConfirmPassword ? "text" : "password"}
-                        placeholder="••••••••"
-                        className="pr-10 text-secondary-foreground"
-                        aria-invalid={!!errors.confirmPassword}
-                        {...registerField("confirmPassword")}
-                    />
-                    <button
-                        type="button"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground"
-                    >
-                        {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                </div>
-                {errors.confirmPassword && <FieldError errors={[errors.confirmPassword]} />}
-            </Field>
+            <FormField label="Confirmar contraseña" name="confirmPassword" error={errors.confirmPassword}>
+                <PasswordInput
+                    id="confirmPassword"
+                    aria-invalid={!!errors.confirmPassword}
+                    {...registerField("confirmPassword")}
+                />
+            </FormField>
 
-            {/* TÉRMINOS */}
             <Field data-invalid={!!errors.acceptsTerms}>
                 <div className="flex items-start gap-2">
                     <input
@@ -186,7 +129,6 @@ export function RegisterForm() {
                 {errors.acceptsTerms && <FieldError errors={[errors.acceptsTerms]} />}
             </Field>
 
-            {/* NEWSLETTER */}
             <Field>
                 <div className="flex items-start gap-2">
                     <input
@@ -201,31 +143,22 @@ export function RegisterForm() {
                 </div>
             </Field>
 
-            {/* BOTÓN */}
-            <Button
+            <LoadingButton
                 type="submit"
                 size="lg"
                 className="w-full h-12"
-                disabled={isPending}
+                loading={isPending}
+                loadingText="Registrando..."
             >
-                {isPending ? (
-                    <>
-                        <Loader2 size={18} className="animate-spin" />
-                        Registrando...
-                    </>
-                ) : (
-                    "Crear cuenta"
-                )}
-            </Button>
+                Crear cuenta
+            </LoadingButton>
 
-            {/* LOGIN LINK */}
             <p className="text-sm text-center text-muted-foreground">
                 ¿Ya tienes una cuenta?{" "}
                 <Link href="/login" className="text-foreground font-medium hover:underline">
                     Inicia sesión
                 </Link>
             </p>
-
         </form>
     );
 }
