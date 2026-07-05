@@ -32,12 +32,12 @@ export function PriceRangeFilter({
         </p>
       </div>
 
-      <div className="flex items-center justify-between gap-3">
-        <span className="min-w-[50px] text-xs font-medium text-foreground bg-secondary rounded-md px-2 py-1 text-center">
+      <div className="flex items-center justify-center gap-2 sm:gap-3">
+        <span className="flex-1 max-w-[90px] text-xs font-medium text-foreground bg-secondary rounded-md px-2 py-1.5 text-center whitespace-nowrap">
           {formatPrice(value[0], 0)}
         </span>
-        <span className="text-xs text-muted-foreground">—</span>
-        <span className="min-w-[50px] text-xs font-medium text-foreground bg-secondary rounded-md px-2 py-1 text-center">
+        <span className="text-xs text-muted-foreground shrink-0">—</span>
+        <span className="flex-1 max-w-[90px] text-xs font-medium text-foreground bg-secondary rounded-md px-2 py-1.5 text-center whitespace-nowrap">
           {formatPrice(value[1], 0)}
         </span>
       </div>
