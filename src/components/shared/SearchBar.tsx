@@ -1,18 +1,13 @@
+"use client";
+
 /**
  * Barra de búsqueda con dropdown de sugerencias.
  *
- * Props principales:
- * - value / onChange: input controlado.
- * - onSubmit: se dispara al presionar Enter o el botón de búsqueda.
- * - renderDropdown: función que renderiza el contenido del dropdown.
- * - onCloseDropdown: se llama al hacer clic fuera del contenedor.
- *
- * Edge cases:
- * - Si no hay renderDropdown, no se adjunta el listener de cierre.
+ * Solo agrega el listener de cierre cuando se provee renderDropdown,
+ * para evitar adjuntar eventos innecesarios si no hay dropdown.
  */
-"use client";
 
-import { memo, useRef, type ReactNode } from "react";
+import { memo, useEffect, useRef, type ReactNode } from "react";
 import { BsFillSearchHeartFill } from "react-icons/bs";
 import { cn } from "@/lib/utils";
 
@@ -41,28 +36,31 @@ export const SearchBar = memo(function SearchBar({
 }: SearchBarProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    if (!renderDropdown) return;
+
+    // Cierra el dropdown al hacer clic fuera del contenedor.
+    // Si el componente está oculto (display:none), ignora el clic
+    // para evitar que dos SearchBars (escritorio/mobile) se estorben.
+    function handleClick(e: MouseEvent) {
+      if (!containerRef.current || containerRef.current.offsetParent === null)
+        return;
+      if (onCloseDropdown && !containerRef.current.contains(e.target as Node)) {
+        onCloseDropdown();
+      }
+    }
+
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, [onCloseDropdown, renderDropdown]);
+
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     onSubmit(value);
   }
 
-  function handleClickOutside(e: React.MouseEvent) {
-    if (
-      onCloseDropdown &&
-      renderDropdown &&
-      containerRef.current &&
-      !containerRef.current.contains(e.target as Node)
-    ) {
-      onCloseDropdown();
-    }
-  }
-
   return (
-    <div
-      ref={containerRef}
-      onClick={handleClickOutside}
-      className="relative w-full"
-    >
+    <div ref={containerRef} className="relative w-full">
       <form
         onSubmit={handleSubmit}
         className={cn(
