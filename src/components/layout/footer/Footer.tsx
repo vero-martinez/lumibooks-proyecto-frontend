@@ -1,107 +1,199 @@
-import Link from "next/link";
-import Image from "next/image";
-import { FaInstagram, FaFacebook, FaTiktok, FaWhatsapp, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaCcVisa, FaCcMastercard, FaCcDinersClub } from "react-icons/fa";
+import NextLink from "next/link";
+import {
+    FaInstagram,
+    FaTiktok,
+    FaWhatsapp,
+    FaMapMarkerAlt,
+    FaPhoneAlt,
+    FaEnvelope,
+    FaCcVisa,
+    FaCcMastercard,
+    FaCcDinersClub,
+} from "react-icons/fa";
 import { SiAmericanexpress } from "react-icons/si";
-import { AppLink } from "@/components/shared/AppLink";
+import { Link } from "@/components/shared/Link";
 
 export function Footer() {
     return (
-        <footer className="w-full bg-foreground text-primary-foreground mt-auto ">
-
-            {/* CONTENIDO PRINCIPAL */}
-            <div className="max-w-7xl mx-auto px-14 py-10 grid grid-cols-1 md:grid-cols-4 gap-10 justify-items-center md:justify-items-start text-center md:text-left">
-
-                {/* COLUMNA LOGO E INFO */}
-                <div className="md:col-span-1 flex flex-col gap-4 items-center md:items-start">
-                    <Link href="/" className="flex items-center gap-2 justify-center">
-                        <span className="font-bold text-2xl">LumiBooks</span>
-                    </Link>
-
-                    <div className="text-md text-background font-bold">
-                        Siguenos en nuestras redes sociales:
-                    </div>
-
-                    {/* REDES SOCIALES */}
-                    <div className="flex items-center gap-4 mt-2">
-                        <AppLink href="https://instagram.com">
-                            <FaInstagram size={25} />
-                        </AppLink>
-                        <AppLink href="https://facebook.com">
-                            <FaFacebook size={25} />
-                        </AppLink>
-                        <AppLink href="https://tiktok.com">
-                            <FaTiktok size={25} />
-                        </AppLink>
-
-                        <AppLink href="https://wa.me/51999999999">
-                            <FaWhatsapp size={25} />
-                        </AppLink>
+        <footer className="w-full bg-foreground text-primary-foreground mt-auto border-t border-primary-foreground/10">
+            <div className="max-w-7xl mx-auto px-10 md:px-14 py-10 flex flex-col md:flex-row md:justify-between gap-10 text-center md:text-left">
+                <div className="flex flex-col gap-4 items-center md:items-start">
+                    <NextLink href="/" className="flex items-center gap-2">
+                        <span
+                            className="font-extrabold text-background text-xl lg:text-2xl tracking-tight drop-shadow-sm"
+                            aria-hidden="true"
+                        >
+                            LumiBooks
+                        </span>
+                    </NextLink>
+                    <p className="text-sm text-background/70 leading-relaxed max-w-[200px]">
+                        Descubre historias que iluminan tu mundo.
+                    </p>
+                    <div className="flex items-center gap-3">
+                        <Link
+                            href="https://instagram.com"
+                            target="_blank"
+                            aria-label="Instagram"
+                            className="rounded-full bg-background/10 p-2.5 hover:bg-background/20 hover:scale-110 transition-all"
+                        >
+                            <FaInstagram size={18} />
+                        </Link>
+                        <Link
+                            href="https://tiktok.com"
+                            target="_blank"
+                            aria-label="TikTok"
+                            className="rounded-full bg-background/10 p-2.5 hover:bg-background/20 hover:scale-110 transition-all"
+                        >
+                            <FaTiktok size={18} />
+                        </Link>
+                        <Link
+                            href="https://wa.me/51999999999"
+                            target="_blank"
+                            aria-label="WhatsApp"
+                            className="rounded-full bg-background/10 p-2.5 hover:bg-background/20 hover:scale-110 transition-all"
+                        >
+                            <FaWhatsapp size={18} />
+                        </Link>
                     </div>
                 </div>
 
-                {/* COLUMNA SOBRE NOSOTROS */}
-                <div className="flex flex-col gap-3">
-                    <h4 className="font-bold text-sm uppercase tracking-wider">Sobre Nosotros</h4>
-                    <div className="flex flex-col gap-4 text-sm text-background">
-                        <AppLink href="/books">Quienes Somos</AppLink>
+                <div className="flex flex-col gap-3 items-center md:items-start">
+                    <h4 className="font-bold text-sm uppercase tracking-widest text-background pb-2 border-b-2 border-primary-foreground/30 w-full">
+                        Contacto
+                    </h4>
+                    <div className="flex flex-col gap-2.5 text-sm text-background/80 items-center md:items-start">
                         <span className="flex items-start gap-2">
-                            <FaMapMarkerAlt size={16} className="shrink-0 mt-0.5" />
+                            <FaMapMarkerAlt
+                                size={14}
+                                className="shrink-0 mt-0.5 text-primary-foreground/40"
+                            />
                             Av. Ejemplo 123, Lima, Perú
                         </span>
-                        <span className="flex items-center gap-2">
-                            <FaPhoneAlt size={16} className="shrink-0" />
+                        <a
+                            href="tel:+51999999999"
+                            className="flex items-center gap-2 hover:text-background transition-colors"
+                        >
+                            <FaPhoneAlt
+                                size={14}
+                                className="shrink-0 text-primary-foreground/40"
+                            />
                             +51 999 999 999
-                        </span>
-                        <span className="flex items-center gap-2">
-                            <FaEnvelope size={16} className="shrink-0" />
+                        </a>
+                        <a
+                            href="mailto:books@lumibooks.pe"
+                            className="flex items-center gap-2 hover:text-background transition-colors"
+                        >
+                            <FaEnvelope
+                                size={14}
+                                className="shrink-0 text-primary-foreground/40"
+                            />
                             books@lumibooks.pe
+                        </a>
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-3 items-center md:items-start">
+                    <h4 className="font-bold text-sm uppercase tracking-widest text-background pb-2 border-b-2 border-primary-foreground/30 w-full">
+                        Categorías
+                    </h4>
+                    <div className="flex flex-col gap-2 text-sm text-background/80 items-center md:items-start">
+                        <Link
+                            href="/books"
+                            className="hover:text-background transition-colors"
+                        >
+                            Infantil
+                        </Link>
+                        <Link
+                            href="/books"
+                            className="hover:text-background transition-colors"
+                        >
+                            Juvenil
+                        </Link>
+                        <Link
+                            href="/books"
+                            className="hover:text-background transition-colors"
+                        >
+                            Fantasía
+                        </Link>
+                        <Link
+                            href="/books"
+                            className="hover:text-background transition-colors"
+                        >
+                            Romance
+                        </Link>
+                        <Link
+                            href="/books"
+                            className="hover:text-background transition-colors"
+                        >
+                            Misterio
+                        </Link>
+                    </div>
+                </div>
+
+                <div className="flex flex-col gap-3 items-center md:items-start">
+                    <h4 className="font-bold text-sm uppercase tracking-widest text-background pb-2 border-b-2 border-primary-foreground/30 w-full">
+                        Políticas
+                    </h4>
+                    <div className="flex flex-col gap-2 text-sm text-background/80 items-center md:items-start">
+                        <Link
+                            href="/terms"
+                            className="hover:text-background transition-colors"
+                        >
+                            Términos y condiciones
+                        </Link>
+                        <Link
+                            href="/privacy"
+                            className="hover:text-background transition-colors"
+                        >
+                            Política de privacidad
+                        </Link>
+                    </div>
+
+                    <h4 className="font-bold text-sm uppercase tracking-widest text-background pb-2 border-b-2 border-primary-foreground/30 w-full mt-3">
+                        Métodos de Pago
+                    </h4>
+                    <div
+                        className="flex items-center gap-2 flex-wrap justify-center md:justify-start"
+                        aria-hidden="true"
+                    >
+                        <span className="rounded-lg bg-background/10 p-1.5">
+                            <FaCcVisa size={22} />
+                        </span>
+                        <span className="rounded-lg bg-background/10 p-1.5">
+                            <FaCcMastercard size={22} />
+                        </span>
+                        <span className="rounded-lg bg-background/10 p-1.5">
+                            <SiAmericanexpress size={22} />
+                        </span>
+                        <span className="rounded-lg bg-background/10 p-1.5">
+                            <FaCcDinersClub size={22} />
                         </span>
                     </div>
                 </div>
-
-                {/* COLUMNA AYUDA */}
-                <div className="flex flex-col gap-3">
-                    <h4 className="font-bold text-sm uppercase tracking-wider">Categorías</h4>
-                    <div className="flex flex-col gap-2 text-sm text-background">
-                        <AppLink href="/books">Infantil</AppLink>
-                        <AppLink href="/books">Juvenil</AppLink>
-                        <AppLink href="/books">Fantasía</AppLink>
-                        <AppLink href="/books">Romance</AppLink>
-                        <AppLink href="/books">Misterio</AppLink>
-
-                    </div>
-                </div>
-
-                {/* COLUMNA LEGAL */}
-                <div className="flex flex-col gap-4">
-                    <h4 className="font-bold text-sm uppercase tracking-wider">Políticas</h4>
-                    <div className="flex flex-col gap-2 text-sm text-background">
-                        <AppLink href="/terms">Términos y condiciones</AppLink>
-                        <AppLink href="/privacy">Política de privacidad</AppLink>
-                    </div>
-
-                    <h4 className="font-bold text-sm uppercase tracking-wider">Métodos de Pago</h4>
-                    <div className="flex items-center gap-4 mt-1">
-                        <FaCcVisa size={22} />
-                        <FaCcMastercard size={22} />
-                        <SiAmericanexpress size={22} />
-                        <FaCcDinersClub size={23} />
-                    </div>
-                </div>
-
             </div>
 
-            {/* LÍNEA Y COPYRIGHT */}
-            <div className="border-t border-primary-foreground/20">
-                <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-center md:justify-between gap-4 text-sm text-background text-center md:text-left">
-                    <span>© 2026 LumiBooks. Todos los derechos reservados.</span>
-                    <div className="flex gap-4">
-                        <AppLink href="/terms" >Términos</AppLink>
-                        <AppLink href="/privacy">Privacidad</AppLink>
+            <div className="border-t border-primary-foreground/10">
+                <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-center md:justify-between gap-2 text-sm text-background/50 text-center md:text-left">
+                    <span>
+                        © {new Date().getFullYear()} LumiBooks. Todos los derechos
+                        reservados.
+                    </span>
+                    <div className="flex gap-5">
+                        <Link
+                            href="/terms"
+                            className="hover:text-background/80 transition-colors"
+                        >
+                            Términos
+                        </Link>
+                        <Link
+                            href="/privacy"
+                            className="hover:text-background/80 transition-colors"
+                        >
+                            Privacidad
+                        </Link>
                     </div>
                 </div>
             </div>
-
         </footer>
     );
 }
