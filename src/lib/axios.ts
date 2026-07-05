@@ -7,10 +7,11 @@
  */
 import axios from "axios";
 import { useAuthStore } from "@/stores/auth.store";
+import { env } from "@/lib/env";
 
 // Instancia centralizada de Axios para comunicación con el backend Spring Boot.
 const api = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL,
+    baseURL: env.apiUrl,
     headers: {
         "Content-Type": "application/json",
     },
