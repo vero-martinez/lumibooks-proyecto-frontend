@@ -8,8 +8,8 @@
  * los filtros de URL solo existen en /books.
  */
 
-import { useCallback, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useBookSuggestions } from "@/features/books/hooks/useBookSuggestions";
 import { useDebounce } from "@/hooks/useDebounce";
 import { MIN_SEARCH_LENGTH } from "@/features/books/constants/catalog.constants";
@@ -24,6 +24,13 @@ export function useBookSearchBar() {
 
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+
+  const searchParams = useSearchParams();
+  const urlSearch = searchParams.get("search") ?? "";
+
+  useEffect(() => {
+    setQuery(urlSearch);
+  }, [urlSearch]);
 
   const debouncedQuery = useDebounce(query, SEARCH_DEBOUNCE_MS);
   const { data: suggestions = [], isFetching } = useBookSuggestions(debouncedQuery);
