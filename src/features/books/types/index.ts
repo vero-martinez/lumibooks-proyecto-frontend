@@ -2,6 +2,8 @@
  * Tipos del módulo de libros.
  */
 
+import { AuthorDetail } from "@/features/authors/types";
+
 // Enums del Backend (format y language)
 export type BookLanguage = "ESPAÑOL" | "INGLES";
 export type BookFormat = "TAPA_BLANDA" | "TAPA_DURA" | "BOLSILLO";
@@ -54,4 +56,24 @@ export interface Category {
 export interface Publisher {
   id: number;
   name: string;
+}
+
+// Respuesta del endpoint público de detalle de un libro
+export interface BookDetail {
+  id: number;
+  coverImageUrl: string;
+  title: string;
+  authors: AuthorDetail[];
+  available: boolean;
+  description: string;
+  price: number;
+  isbn: string;
+  pageCount: number;
+  publisherName: string;
+  language: BookLanguage;
+  format: BookFormat;
+  editionYear?: number;
+  categories: string[];
+  averageRating: number;
+  totalReviews: number;
 }
