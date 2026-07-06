@@ -11,3 +11,10 @@ export interface ReviewPublic {
     createdAt: string;
     updatedAt: string;
 }
+
+// Parámetros de paginación para el servicio de reseñas
+export interface BookReviewsParams {
+    page?: number;
+    size?: number;
+    rating?: number;
+}
