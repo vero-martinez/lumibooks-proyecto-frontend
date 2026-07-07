@@ -4,11 +4,11 @@
  * Optimizada con memo y priority para LCP.
  */
 import Link from "next/link";
-import Image from "next/image";
 import { memo } from "react";
 import { FaStar, FaShoppingCart, FaHeart } from "react-icons/fa";
 import { Card, CardContent } from "@/components/ui/card";
 import { BookCard as BookCardType } from "@/features/books/types";
+import { BookCover } from "@/components/shared/BookCover";
 import { IconButton } from "@/components/shared/IconButton";
 import { buildBookDetailUrl } from "@/features/books/utils/buildBookDetailUrl";
 import { formatPrice } from "@/lib/utils";
@@ -39,16 +39,13 @@ export const BookCard = memo(function BookCard({
       <CardContent className="flex flex-col items-center p-3 md:p-6">
         <Link href={detailUrl} className="flex flex-col items-center">
           {/* Portada */}
-          <div className="relative shrink-0 w-[90px] h-[145px] sm:w-[105px] sm:h-[168px] md:w-[115px] md:h-[185px] lg:w-[125px] lg:h-[200px] overflow-hidden rounded shadow-sm">
-            <Image
-              src={book.coverImageUrl}
-              alt={book.title}
-              fill
-              sizes={COVER_SIZES}
-              priority={priority}
-              className="object-cover"
-            />
-          </div>
+          <BookCover
+            src={book.coverImageUrl}
+            alt={book.title}
+            sizes={COVER_SIZES}
+            priority={priority}
+            className="w-[90px] h-[145px] sm:w-[105px] sm:h-[168px] md:w-[115px] md:h-[185px] lg:w-[125px] lg:h-[200px] shadow-sm rounded-lg"
+          />
 
           <div className="flex flex-col items-center gap-2 md:gap-3 text-card-foreground mt-2">
             {/* Título */}
@@ -62,13 +59,16 @@ export const BookCard = memo(function BookCard({
             </p>
 
             {/* Rating */}
-            <div className="flex items-center gap-1 md:gap-2">
+            <div
+              className="flex items-center gap-1 md:gap-2"
+              aria-label={`${book.averageRating.toFixed(1)} de 5 estrellas, ${book.totalReviews} ${book.totalReviews === 1 ? "comentario" : "comentarios"}`}
+            >
               <FaStar
                 size={14}
-                className="text-accent md:size-4"
+                className="text-star md:size-4"
                 aria-hidden="true"
               />
-              <span className="text-xs md:text-sm">
+              <span aria-hidden="true" className="text-xs md:text-sm">
                 {book.averageRating.toFixed(1)} ({book.totalReviews})
               </span>
             </div>
