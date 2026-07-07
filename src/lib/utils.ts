@@ -11,6 +11,15 @@ export function formatPrice(price: number, decimals = 2): string {
   return `S/ ${price.toFixed(decimals)}`;
 }
 
+// Da formato a una fecha ISO al estilo local peruano: "15 dic. 2025".
+export function formatDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString("es-PE", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 // Convierte un texto en un slug para URLs (sin tildes, sin espacios).
 export function slugify(text: string): string {
   return text
