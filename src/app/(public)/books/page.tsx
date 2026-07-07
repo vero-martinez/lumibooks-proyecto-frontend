@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import { ImSpinner2, ImSearch } from "react-icons/im";
+import { ImSpinner2 } from "react-icons/im";
 import { useFiltersUrl } from "@/hooks/useFiltersUrl";
 import { useBooks } from "@/features/books/hooks";
 import {
@@ -19,7 +19,9 @@ import {
 } from "@/features/books/constants/catalog.constants";
 import { AppPagination } from "@/components/shared/AppPagination";
 import { ClearSearchButton } from "@/components/shared/ClearSearchButton";
-import { Button } from "@/components/ui/button";
+import { EmptyState } from "@/components/shared/EmptyState";
+import { ErrorState } from "@/components/shared/ErrorState";
+import { LoadingState } from "@/components/shared/LoadingState";
 
 // Las primeras 4 cards cargan la imagen sin lazy loading
 // para mejorar el rendimiento (LCP).
@@ -101,41 +103,13 @@ function BooksPageContent() {
         {/* Zona de resultados: loading, error, libros o vacío */}
         <div className="min-h-[60vh]">
           {/* Mientras se cargan los datos mostramos un spinner */}
-          {isLoading && (
-            <div
-              role="status"
-              aria-live="polite"
-              className="flex items-center justify-center py-20"
-            >
-              <ImSpinner2
-                size={32}
-                className="animate-spin text-primary"
-                aria-hidden="true"
-              />
-              <span className="sr-only">Cargando libros...</span>
-            </div>
-          )}
+          {isLoading && <LoadingState label="Cargando libros..." />}
 
           {isError && (
-            <div
-              role="alert"
-              className="flex flex-col items-center justify-center py-20 gap-3"
-            >
-              <p className="text-lg font-medium text-destructive">
-                Error al cargar los libros
-              </p>
-              <p className="text-sm text-muted-foreground text-center max-w-md">
-                Ocurrió un problema al obtener los libros. Intenta de nuevo más
-                tarde.
-              </p>
-              <Button
-                variant="outline"
-                onClick={() => window.location.reload()}
-                className="border-primary/40 text-primary hover:bg-primary/10 hover:text-primary"
-              >
-                Reintentar
-              </Button>
-            </div>
+            <ErrorState
+              message="Error al cargar los libros"
+              description="Ocurrió un problema al obtener los libros. Intenta de nuevo más tarde."
+            />
           )}
 
           {hasResults && (
@@ -151,26 +125,11 @@ function BooksPageContent() {
           )}
 
           {hasNoResults && (
-            <div className="flex flex-col items-center justify-center py-40 gap-4">
-              <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-2">
-                <ImSearch
-                  size={24}
-                  className="text-muted-foreground"
-                  aria-hidden="true"
-                />
-              </div>
-              <p className="text-lg font-semibold">No se encontraron libros</p>
-              <p className="text-sm text-muted-foreground text-center max-w-md">
-                Intenta cambiar los filtros o realizar una búsqueda diferente.
-              </p>
-              <Button
-                variant="outline"
-                onClick={handleClearAll}
-                className="border-primary/40 text-primary hover:bg-primary/10 hover:text-primary"
-              >
-                Limpiar filtros
-              </Button>
-            </div>
+            <EmptyState
+              title="No se encontraron libros"
+              description="Intenta cambiar los filtros o realizar una búsqueda diferente."
+              action={{ label: "Limpiar filtros", onClick: handleClearAll }}
+            />
           )}
         </div>
 
