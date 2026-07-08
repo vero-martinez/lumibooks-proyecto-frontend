@@ -1,8 +1,12 @@
+/**
+ * Tarjeta de autor con foto, nombre y enlace a detalle.
+ * Usada en listados de autores (grid).
+ */
 import { memo } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
-import { AuthorPublicResponse } from "@/features/authors/types";
+import { UserAvatar } from "@/components/shared/UserAvatar";
+import { Link } from "@/components/shared/Link";
+import type { AuthorPublicResponse } from "@/features/authors/types";
 import { buildAuthorDetailUrl } from "@/features/authors/utils/buildAuthorDetailUrl";
 
 interface AuthorCardProps {
@@ -14,16 +18,11 @@ export const AuthorCard = memo(function AuthorCard({ author, priority = false }:
   return (
     <Card className="shadow-lg shadow-foreground/30 bg-card w-full min-h-[200px] md:min-h-[220px] transition-all duration-200 hover:shadow-xl hover:shadow-foreground/40 hover:-translate-y-1">
       <CardContent className="flex flex-col items-center justify-center p-3 md:p-6 gap-3 md:gap-4">
-        <div className="relative w-24 h-24 shrink-0 overflow-hidden rounded-full bg-accent">
-          <Image
-            src={author.profileImageUrl || "/profile-placeholder.svg"}
-            alt={author.fullName}
-            fill
-            sizes="192px"
-            priority={priority}
-            className="object-cover"
-          />
-        </div>
+        <UserAvatar
+          src={author.profileImageUrl}
+          name={author.fullName}
+          className="w-24 h-24 text-2xl font-extrabold ring-2 ring-foreground/40 text-foreground bg-foreground/10"
+        />
         <h3 className="text-xs md:text-sm font-semibold text-center line-clamp-2 text-foreground">
           {author.fullName}
         </h3>

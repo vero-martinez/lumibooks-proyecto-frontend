@@ -38,6 +38,13 @@
   --color-accent: var(--accent); /* Color para hover, destacados y elementos decorativos */
   --color-accent-foreground: var(--accent-foreground); /* Texto sobre fondos accent */
 
+  /* Stars */
+  --color-star: var(--star); /* Color de estrellas de rating */
+
+  /* Status */
+  --color-success: var(--success); /* Verde para Disponible */
+  --color-success-bg: var(--success-bg); /* Fondo verde claro para badge Disponible */
+
   /* Border radius */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -103,6 +110,13 @@
   /* Accent */
   --accent: #f3cc97; /* Color para hover, destacados y elementos decorativos */
   --accent-foreground: #C43670; /* Texto sobre fondos accent */
+
+  /* Stars */
+  --star: #e8a317; /* Amarillo vivo para estrellas de rating */
+
+  /* Status */
+  --success: #3f7c1c; /* Verde para texto Disponible */
+  --success-bg: #e6f5da; /* Fondo verde claro para badge Disponible */
 
   /* Border radius */
   --radius: 0.625rem;

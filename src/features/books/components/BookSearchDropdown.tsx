@@ -5,7 +5,7 @@
  * Se muestra debajo del SearchBar cuando hay query activa.
  * Muestra: loading, empty state, lista de sugerencias con portada, y botón "Ver todos".
  */
-import Image from "next/image";
+import { BookCover } from "@/components/shared/BookCover";
 import { ImSpinner2 } from "react-icons/im";
 import type { BookSuggestionResponse } from "@/features/books/types";
 
@@ -31,14 +31,11 @@ function SuggestionItem({ book, onSelect }: SuggestionItemProps) {
       onClick={() => onSelect(book.id, book.title)}
       className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-accent/20 focus-visible:bg-accent/20 focus-visible:outline-none transition-colors first:rounded-t-xl last:rounded-b-xl"
     >
-      <div className="relative w-10 h-14 shrink-0 rounded-md overflow-hidden bg-muted shadow-sm border border-border/20">
-        <Image
-          src={book.coverImageUrl}
-          alt={book.title}
-          fill
-          className="object-cover"
-        />
-      </div>
+      <BookCover
+        src={book.coverImageUrl}
+        alt={book.title}
+        className="w-10 h-14 bg-muted shadow-sm"
+      />
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-semibold text-secondary-foreground">
           {book.title}

@@ -15,3 +15,12 @@ export interface AuthorsFilters {
     page?: number;
     size?: number;
 }
+
+// Respuesta del endpoint público de detalle de un autor
+export interface AuthorDetail {
+    id: number;
+    firstName: string;
+    lastName: string;
+    biography?: string;
+    profileImageUrl?: string;
+}
