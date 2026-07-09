@@ -14,7 +14,7 @@ import {
 } from "./client";
 import { useCartStore } from "@/stores/cart.store";
 import { useAuthStore } from "@/stores/auth.store";
-import type { CartAddItemRequest, CartLocalItem, CartUpdateQuantityRequest, CartMergeRequest } from "@/features/cart/types";
+import type { CartAddItemRequest, CartLocalItem, CartMergeRequest } from "@/features/cart/types";
 
 /**
  * Agrega un libro al carrito.
@@ -84,6 +84,8 @@ export async function clearCart() {
  * Después del merge limpia el localStorage.
  */
 export async function mergeCart(request: CartMergeRequest) {
+    const token = useAuthStore.getState().token;
+    if (!token) return;
     await mergeCartService(request);
     useCartStore.getState().clearCart();
 }
