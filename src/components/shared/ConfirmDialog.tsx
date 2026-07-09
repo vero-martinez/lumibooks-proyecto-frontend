@@ -8,7 +8,7 @@
 
 import { useEffect, useRef, ReactNode } from "react";
 import { createPortal } from "react-dom";
-import { FaExclamationTriangle } from "react-icons/fa";
+import { FaExclamationTriangle, FaSpinner } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +20,8 @@ interface ConfirmDialogProps {
   cancelLabel?: string;
   confirmClassName?: string;
   icon?: ReactNode | null;
+  /** Deshabilita el botón de confirmar y muestra un spinner */
+  isLoading?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 }
@@ -36,6 +38,7 @@ export function ConfirmDialog({
   cancelLabel = "Cancelar",
   confirmClassName = "bg-primary text-primary-foreground",
   icon = DEFAULT_ICON,
+  isLoading = false,
   onConfirm,
   onCancel,
 }: ConfirmDialogProps) {
@@ -91,9 +94,17 @@ export function ConfirmDialog({
           </Button>
           <Button
             onClick={onConfirm}
+            disabled={isLoading}
             className={cn("flex-1 px-5 py-5", confirmClassName)}
           >
-            {confirmLabel}
+            {isLoading ? (
+              <>
+                <FaSpinner className="animate-spin mr-2" aria-hidden="true" />
+                {confirmLabel}
+              </>
+            ) : (
+              confirmLabel
+            )}
           </Button>
         </div>
       </div>
