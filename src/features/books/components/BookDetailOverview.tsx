@@ -15,8 +15,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { StarRating } from "@/components/shared/StarRating";
 import { QuantitySelector } from "@/components/shared/QuantitySelector";
-import { formatPrice, formatAuthors } from "@/lib/utils";
+import { formatPrice, formatAuthors, cn } from "@/lib/utils";
 import type { BookDetail } from "@/features/books/types";
+import { useAddToCart } from "@/features/cart/hooks";
+import { buildAddToCartPayload } from "@/features/cart/services/addToCartPayload";
 
 interface BookDetailOverviewProps {
   book: BookDetail;
@@ -24,6 +26,11 @@ interface BookDetailOverviewProps {
 
 export function BookDetailOverview({ book }: BookDetailOverviewProps) {
   const [quantity, setQuantity] = useState(1);
+  const addToCart = useAddToCart();
+
+  const BUTTON_BASE = "gap-2 h-10 md:h-11 rounded-lg transition-all text-sm md:text-base";
+  const PRIMARY_BUTTON = "px-5 md:px-6 shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30";
+  const OUTLINE_BUTTON = "px-5 md:px-4 border-primary/30 text-foreground hover:bg-primary/5 hover:border-primary/60";
 
   return (
     <Card className="max-w-2xl bg-transparent">
@@ -106,13 +113,17 @@ export function BookDetailOverview({ book }: BookDetailOverviewProps) {
         </div>
 
         <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3 pt-2">
-          <Button className="gap-2 h-10 md:h-11 px-5 md:px-6 rounded-lg shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all text-sm md:text-base">
+          <Button
+            onClick={() => addToCart.mutate(buildAddToCartPayload(book, quantity))}
+            disabled={addToCart.isPending || !book.available}
+            className={cn(BUTTON_BASE, PRIMARY_BUTTON)}
+          >
             <FaShoppingCart size={16} aria-hidden="true" />
-            Añadir al carrito
+            {addToCart.isPending ? "Agregando..." : "Añadir al carrito"}
           </Button>
           <Button
             variant="outline"
-            className="gap-2 h-10 md:h-11 px-5 md:px-4 rounded-lg border-primary/30 text-foreground hover:bg-primary/5 hover:border-primary/60 transition-all text-sm md:text-base"
+            className={cn(BUTTON_BASE, OUTLINE_BUTTON)}
           >
             <FaHeart size={16} aria-hidden="true" />
             Añadir a la lista de deseos
