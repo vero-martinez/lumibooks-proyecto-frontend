@@ -18,7 +18,7 @@ import { QuantitySelector } from "@/components/shared/QuantitySelector";
 import { formatPrice, formatAuthors, cn } from "@/lib/utils";
 import type { BookDetail } from "@/features/books/types";
 import { useAddToCart } from "@/features/cart/hooks";
-import { buildAddToCartPayload } from "@/features/cart/services/addToCartPayload";
+import { buildAddToCartPayload } from "@/features/cart/services/index";
 
 interface BookDetailOverviewProps {
   book: BookDetail;

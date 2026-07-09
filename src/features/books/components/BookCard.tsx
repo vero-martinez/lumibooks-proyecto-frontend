@@ -15,7 +15,7 @@ import { IconButton } from "@/components/shared/IconButton";
 import { buildBookDetailUrl } from "@/features/books/utils/buildBookDetailUrl";
 import { formatPrice } from "@/lib/utils";
 import { useAddToCart } from "@/features/cart/hooks";
-import { buildAddToCartPayload } from "@/features/cart/services/addToCartPayload";
+import { buildAddToCartPayload } from "@/features/cart/services/index";
 
 interface BookCardProps {
   book: BookCardType;
