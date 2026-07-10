@@ -1,10 +1,9 @@
-/* components/layout/navbar/Navbar.tsx */
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
-import { FaShoppingCart, FaHeart, FaUser } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 import { IoMdCloseCircle } from "react-icons/io";
 import { TiThMenu } from "react-icons/ti";
 import { IconButton } from "@/components/shared/IconButton";
@@ -12,6 +11,8 @@ import { SearchBar } from "@/components/shared/SearchBar";
 import { Link } from "@/components/shared/Link";
 import { useBookSearchBar } from "@/features/books/hooks";
 import { BookSearchDropdown } from "@/features/books/components/BookSearchDropdown";
+import { CartMiniDropdown } from "@/features/cart/components/CartMiniDropdown";
+import { UserMenu } from "@/features/auth/components/UserMenu";
 
 interface NavLink {
   href: string;
@@ -106,38 +107,18 @@ export function Navbar() {
 
           {/* Iconos desktop: carrito, favoritos e inicio de sesión */}
           <div className="hidden lg:flex items-center gap-6 shrink-0">
-            <IconButton
-              icon={FaShoppingCart}
-              label="Carrito"
-              className="hover:scale-110 transition-transform"
-            />
+            <CartMiniDropdown />
 
-            <NextLink
-              href="/cliente/wishlist"
-              aria-label="Favoritos"
-              className="rounded-full bg-accent flex items-center justify-center w-11 h-11 text-foreground hover:bg-accent/70 hover:scale-110 transition-all focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
-            >
-              <FaHeart size={22} aria-hidden="true" />
+            <NextLink href="/cliente/wishlist" aria-label="Favoritos">
+              <IconButton icon={FaHeart} label="Favoritos" />
             </NextLink>
 
-            <NextLink
-              href="/login"
-              className="flex flex-col items-start justify-center hover:opacity-80 transition-opacity"
-            >
-              <span className="font-bold text-primary-foreground">¡Hola!</span>
-              <span className="text-sm font-bold text-primary-foreground">
-                Iniciar Sesión
-              </span>
-            </NextLink>
+            <UserMenu variant="full" />
           </div>
 
           {/* Botones mobile: carrito y menú hamburguesa */}
           <div className="lg:hidden ml-auto flex items-center gap-4">
-            <IconButton
-              icon={FaShoppingCart}
-              label="Carrito"
-              className="hover:scale-110 transition-transform"
-            />
+            <CartMiniDropdown />
 
             <button
               className="text-background transition-transform duration-200 hover:scale-110"
@@ -178,16 +159,7 @@ export function Navbar() {
               <span className="text-sm font-medium">Mis listas</span>
             </NextLink>
 
-            <NextLink
-              href="/login"
-              className="flex items-center gap-3 text-primary-foreground/80 hover:text-primary-foreground px-3 py-2.5 rounded-md hover:bg-accent/10 transition-colors text-sm font-medium"
-              onClick={closeMobileMenu}
-            >
-              <span className="rounded-full bg-accent flex items-center justify-center w-9 h-9 text-foreground">
-                <FaUser size={18} aria-hidden="true" />
-              </span>
-              <span className="text-sm font-medium">Iniciar Sesión</span>
-            </NextLink>
+            <UserMenu variant="compact" onAction={closeMobileMenu} />
           </div>
         </div>
       </header>
