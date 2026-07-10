@@ -7,14 +7,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { loginService } from "@/features/auth/services";
 import { useAuthStore } from "@/stores/auth.store";
-import { useMergeCartOnLogin } from "@/features/cart/hooks";
+import { mergeCartOnLogin } from "@/features/cart/services";
 import type { LoginFormData } from "@/features/auth/types";
 
 export function useLogin() {
     const router = useRouter();
     const { setAuth } = useAuthStore();
-    const mergeCartOnLogin = useMergeCartOnLogin();
-
     return useMutation({
         mutationFn: (data: LoginFormData) => loginService(data),
         onSuccess: async (response) => {

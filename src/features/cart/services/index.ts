@@ -4,3 +4,4 @@
 export * from "./client";
 export * from "./cart-adapter";
 export * from "./addToCartPayload";
+export * from "./mergeCartOnLogin";
