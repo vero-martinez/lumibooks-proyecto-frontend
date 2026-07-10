@@ -13,6 +13,9 @@ export interface CartItemResponse {
     subtotal: number;
 }
 
+// Item del carrito para la UI de la página (sin cartItemId)
+export type CartLayoutItem = Omit<CartItemResponse, "cartItemId">;
+
 // Respuesta del backend: carrito completo (página de carrito)
 export interface CartResponse {
     cartId: number;
