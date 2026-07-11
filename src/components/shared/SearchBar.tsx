@@ -6,10 +6,10 @@
  * Solo agrega el listener de cierre cuando se provee renderDropdown,
  * para evitar adjuntar eventos innecesarios si no hay dropdown.
  */
-
 import { memo, useEffect, useRef, type ReactNode } from "react";
 import { BsFillSearchHeartFill } from "react-icons/bs";
 import { cn } from "@/lib/utils";
+import { useClickOutside } from "@/hooks/useClickOutside";
 
 interface SearchBarProps {
   value: string;
@@ -36,23 +36,11 @@ export const SearchBar = memo(function SearchBar({
 }: SearchBarProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (!renderDropdown) return;
-
-    // Cierra el dropdown al hacer clic fuera del contenedor.
-    // Si el componente está oculto (display:none), ignora el clic
-    // para evitar que dos SearchBars (escritorio/mobile) se estorben.
-    function handleClick(e: MouseEvent) {
-      if (!containerRef.current || containerRef.current.offsetParent === null)
-        return;
-      if (onCloseDropdown && !containerRef.current.contains(e.target as Node)) {
-        onCloseDropdown();
-      }
-    }
-
-    document.addEventListener("click", handleClick);
-    return () => document.removeEventListener("click", handleClick);
-  }, [onCloseDropdown, renderDropdown]);
+  useClickOutside(containerRef, () => onCloseDropdown?.(), {
+  eventType: "click",
+  enabled: !!renderDropdown,
+  checkVisibility: true,
+});
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

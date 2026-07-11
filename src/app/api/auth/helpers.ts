@@ -5,6 +5,7 @@
  */
 
 import { NextResponse } from "next/server";
+import { AUTH_COOKIE_OPTIONS } from "./cookie-options";
 import { AuthResponse } from "@/types/api.types";
 import { env } from "@/lib/env";
 
@@ -30,21 +31,13 @@ export async function handleAuthRequest(
 
         const nextResponse = NextResponse.json(data);
 
-        // Cookie con el token JWT — no accesible desde JavaScript
         nextResponse.cookies.set("auth-token", data.token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            path: "/",
+            ...AUTH_COOKIE_OPTIONS,
             maxAge: 60 * 60 * 24, // 1 día
         });
 
-        // Cookie con el rol — no accesible desde JavaScript
         nextResponse.cookies.set("auth-role", data.role, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            path: "/",
+            ...AUTH_COOKIE_OPTIONS,
             maxAge: 60 * 60 * 24, // 1 día
         });
 

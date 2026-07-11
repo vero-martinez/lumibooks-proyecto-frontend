@@ -42,3 +42,12 @@ export async function registerService(
 
     return result;
 }
+
+// Llama al endpoint interno de Next.js para cerrar sesión
+export async function logoutService(): Promise<void> {
+    const response = await fetch("/api/auth/logout", { method: "POST" });
+
+    if (!response.ok) {
+        throw new Error("Error al cerrar sesión");
+    }
+}

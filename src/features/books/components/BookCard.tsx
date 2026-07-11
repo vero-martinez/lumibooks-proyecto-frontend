@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Tarjeta individual de libro.
  * Muestra portada, título, autores, rating, precio y acciones rápidas (carrito, favoritos).
@@ -12,6 +14,8 @@ import { BookCover } from "@/components/shared/BookCover";
 import { IconButton } from "@/components/shared/IconButton";
 import { buildBookDetailUrl } from "@/features/books/utils/buildBookDetailUrl";
 import { formatPrice } from "@/lib/utils";
+import { useAddToCart } from "@/features/cart/hooks";
+import { buildAddToCartPayload } from "@/features/cart/services/index";
 
 interface BookCardProps {
   book: BookCardType;
@@ -33,6 +37,7 @@ export const BookCard = memo(function BookCard({
   priority = false,
 }: BookCardProps) {
   const detailUrl = buildBookDetailUrl(book.id, book.title);
+  const addToCart = useAddToCart();
 
   return (
     <Card className="shadow-lg shadow-foreground/30 bg-card w-full min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] transition-shadow hover:shadow-xl hover:-translate-y-0.5 duration-200">
@@ -85,6 +90,7 @@ export const BookCard = memo(function BookCard({
           <IconButton
             icon={FaShoppingCart}
             label="Agregar al carrito"
+            onClick={() => addToCart.mutate(buildAddToCartPayload(book))}
             className={QUICK_ACTION_HOVER}
           />
 
