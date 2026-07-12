@@ -77,3 +77,12 @@ export interface BookDetail {
   averageRating: number;
   totalReviews: number;
 }
+
+// Respuesta para obtener un libro de una lista.
+export interface BookWishlistResponse {
+  id: number;
+  coverImageUrl: string;
+  title: string;
+  authors: string[];
+  price: number;
+}
