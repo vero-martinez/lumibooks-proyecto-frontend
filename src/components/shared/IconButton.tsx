@@ -43,7 +43,7 @@ export const IconButton = memo(function IconButton({
       disabled={disabled}
       className={cn(
         "rounded-full bg-accent flex items-center justify-center text-foreground transition-all",
-        "hover:bg-accent/70 active:scale-95",
+        "hover:bg-foreground hover:text-secondary active:scale-95",
         "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none",
         "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-accent disabled:active:scale-100",
         buttonSize,
