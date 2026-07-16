@@ -6,12 +6,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { addItem } from "@/features/cart/services/cart-adapter";
+import { buildAddToCartPayload, type BookSource } from "@/features/cart/services/addToCartPayload";
 
 export function useAddToCart() {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: addItem,
+        mutationFn: ({ book, quantity }: { book: BookSource; quantity?: number }) =>
+            addItem(buildAddToCartPayload(book, quantity)),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["cart"] });
             toast.success("Libro agregado al carrito");

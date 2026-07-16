@@ -4,7 +4,7 @@
  */
 import type { CartLocalItem } from "@/features/cart/types";
 
-interface BookSource {
+export interface BookSource {
     id: number;
     coverImageUrl: string;
     title: string;
