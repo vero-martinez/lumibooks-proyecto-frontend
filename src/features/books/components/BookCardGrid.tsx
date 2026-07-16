@@ -6,11 +6,11 @@
  * BookCard es un componente presentacional que solo renderiza UI.
  */
 import { useState } from "react";
-import { toast } from "sonner";
 import { useAddToCart } from "@/features/cart/hooks";
 import { useWishlists, useAddBookToWishlist, useBookWishlistStatus } from "@/features/wishlists/hooks";
 import { useAuthStore } from "@/stores/auth.store";
 import { WishlistSelectDialog } from "@/features/wishlists/components/WishlistSelectDialog";
+import { AuthRequiredDialog } from "@/components/shared/AuthRequiredDialog";
 import { BookCard } from "./BookCard";
 import type { BookCard as BookCardType } from "@/features/books/types";
 
@@ -26,13 +26,14 @@ export function BookCardGrid({ books, priorityCount = 0 }: BookCardGridProps) {
   const addBookToWishlist = useAddBookToWishlist();
 
   const [selectedBook, setSelectedBook] = useState<BookCardType | null>(null);
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
   const { data: selectedBookStatus } = useBookWishlistStatus(selectedBook?.id ?? 0);
 
   const isBusy = addBookToWishlist.isPending;
 
   const handleAddToWishlist = (book: BookCardType) => {
     if (!isAuthenticated) {
-      toast.error("Inicia sesión para agregar libros a tus listas");
+      setAuthDialogOpen(true);
       return;
     }
     setSelectedBook(book);
@@ -74,6 +75,11 @@ export function BookCardGrid({ books, priorityCount = 0 }: BookCardGridProps) {
         isLoading={isBusy}
         onSelect={handleSelectWishlist}
         onCancel={() => setSelectedBook(null)}
+      />
+
+      <AuthRequiredDialog
+        open={authDialogOpen}
+        onCancel={() => setAuthDialogOpen(false)}
       />
     </>
   );
