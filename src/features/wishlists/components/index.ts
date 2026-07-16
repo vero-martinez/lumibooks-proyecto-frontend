@@ -6,4 +6,5 @@ export * from "./WishlistMiniDropdown";
 export * from "./WishlistCard";
 export * from "./WishlistNameDialog";
 export * from "./WishlistSelectDialog";
-export * from "./WishlistBookTable"
+export * from "./WishlistBookTable";
+export * from "./WishlistDetailHeader";
