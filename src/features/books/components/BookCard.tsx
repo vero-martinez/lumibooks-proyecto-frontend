@@ -1,8 +1,7 @@
-"use client";
-
 /**
  * Tarjeta individual de libro.
  * Muestra portada, título, autores, rating, precio y acciones rápidas (carrito, favoritos).
+ * Componente presentacional — la lógica de carrito y wishlist vive en BookCardGrid.
  * Optimizada con memo y priority para LCP.
  */
 import Link from "next/link";
@@ -14,8 +13,7 @@ import { BookCover } from "@/components/shared/BookCover";
 import { IconButton } from "@/components/shared/IconButton";
 import { buildBookDetailUrl } from "@/features/books/utils/buildBookDetailUrl";
 import { formatPrice } from "@/lib/utils";
-import { useAddToCart } from "@/features/cart/hooks";
-import { buildAddToCartPayload } from "@/features/cart/services/index";
+import { BOOK_COVER_SIZES } from "@/features/books/constants/catalog.constants";
 
 interface BookCardProps {
   book: BookCardType;
@@ -25,29 +23,27 @@ interface BookCardProps {
    * Esta decisión corresponde al componente padre.
    */
   priority?: boolean;
+  onAddToCart: () => void;
+  onAddToWishlist: () => void;
 }
-
-const COVER_SIZES =
-  "(min-width: 1024px) 250px, (min-width: 768px) 230px, (min-width: 640px) 210px, 180px";
-
-const QUICK_ACTION_HOVER = "hover:bg-foreground hover:text-secondary";
 
 export const BookCard = memo(function BookCard({
   book,
   priority = false,
+  onAddToCart,
+  onAddToWishlist,
 }: BookCardProps) {
   const detailUrl = buildBookDetailUrl(book.id, book.title);
-  const addToCart = useAddToCart();
 
   return (
-    <Card className="shadow-lg shadow-foreground/30 bg-card w-full min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] transition-shadow hover:shadow-xl hover:-translate-y-0.5 duration-200">
+    <Card className="shadow-lg shadow-foreground/30 bg-card w-full min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] transition-shadow hover:shadow-xl">
       <CardContent className="flex flex-col items-center p-3 md:p-6">
         <Link href={detailUrl} className="flex flex-col items-center">
           {/* Portada */}
           <BookCover
             src={book.coverImageUrl}
             alt={book.title}
-            sizes={COVER_SIZES}
+            sizes={BOOK_COVER_SIZES}
             priority={priority}
             className="w-[90px] h-[145px] sm:w-[105px] sm:h-[168px] md:w-[115px] md:h-[185px] lg:w-[125px] lg:h-[200px] shadow-sm rounded-lg"
           />
@@ -90,14 +86,13 @@ export const BookCard = memo(function BookCard({
           <IconButton
             icon={FaShoppingCart}
             label="Agregar al carrito"
-            onClick={() => addToCart.mutate(buildAddToCartPayload(book))}
-            className={QUICK_ACTION_HOVER}
+            onClick={onAddToCart}
           />
 
           <IconButton
             icon={FaHeart}
-            label="Agregar a favoritos"
-            className={QUICK_ACTION_HOVER}
+            label="Agregar a una lista de deseos"
+            onClick={onAddToWishlist}
           />
         </div>
       </CardContent>
