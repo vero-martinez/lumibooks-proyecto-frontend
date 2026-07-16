@@ -13,6 +13,6 @@ export function useBookWishlistStatus(bookId: number) {
     return useQuery({
         queryKey: ["wishlist-book-status", bookId],
         queryFn: () => getBookStatusService(bookId),
-        enabled: isAuthenticated,
+        enabled: isAuthenticated && bookId > 0,
     });
 }

@@ -14,4 +14,3 @@ export * from "./useRenameWishlist";
 export * from "./useDeleteWishlist";
 export * from "./useAddBookToWishlist";
 export * from "./useRemoveBookFromWishlist";
-export * from "./useMoveBookBetweenWishlists";
