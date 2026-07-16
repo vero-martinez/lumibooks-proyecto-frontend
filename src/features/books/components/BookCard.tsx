@@ -13,7 +13,6 @@ import { BookCover } from "@/components/shared/BookCover";
 import { IconButton } from "@/components/shared/IconButton";
 import { buildBookDetailUrl } from "@/features/books/utils/buildBookDetailUrl";
 import { formatPrice } from "@/lib/utils";
-import { BOOK_COVER_SIZES } from "@/features/books/constants/catalog.constants";
 
 interface BookCardProps {
   book: BookCardType;
@@ -43,7 +42,7 @@ export const BookCard = memo(function BookCard({
           <BookCover
             src={book.coverImageUrl}
             alt={book.title}
-            sizes={BOOK_COVER_SIZES}
+            sizes="(min-width: 1024px) 250px, (min-width: 768px) 230px, (min-width: 640px) 210px, 180px"
             priority={priority}
             className="w-[90px] h-[145px] sm:w-[105px] sm:h-[168px] md:w-[115px] md:h-[185px] lg:w-[125px] lg:h-[200px] shadow-sm rounded-lg"
           />
