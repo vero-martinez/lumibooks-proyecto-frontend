@@ -95,8 +95,8 @@
   --card-foreground: #121212; /* Texto dentro de tarjetas */
 
   /* Popover */
-  --popover: #FBF4EB; /* Fondo de menús flotantes, dropdowns y modales pequeños */
-  --popover-foreground: #C43670; /* Texto dentro de popovers */
+  --popover: #e7e9eb; /* Fondo de menús flotantes, dropdowns y modales pequeños */
+  --popover-foreground: #121212; /* Texto dentro de popovers */
 
   /* Button */
   --primary: #c43670; /* Color del boton */
