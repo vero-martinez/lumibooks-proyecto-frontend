@@ -8,7 +8,7 @@ import {
   BookFilters,
   BookFiltersTrigger,
 } from "@/features/books/components/BookFilters";
-import { BookCard } from "@/features/books/components/BookCard";
+import { BookCardGrid } from "@/features/books/components/BookCardGrid";
 import { BookSort } from "@/features/books/types";
 import type { BookFilters as BookFiltersType } from "@/features/books/types";
 import { SortSelect } from "@/components/shared/SortSelect";
@@ -113,15 +113,10 @@ function BooksPageContent() {
           )}
 
           {hasResults && (
-            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
-              {data.content.map((book, index) => (
-                <BookCard
-                  key={book.id}
-                  book={book}
-                  priority={index < PRIORITY_CARDS_COUNT}
-                />
-              ))}
-            </div>
+            <BookCardGrid
+              books={data.content}
+              priorityCount={PRIORITY_CARDS_COUNT}
+            />
           )}
 
           {hasNoResults && (
