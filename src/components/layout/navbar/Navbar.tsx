@@ -3,15 +3,14 @@
 import { useCallback, useEffect, useState } from "react";
 import NextLink from "next/link";
 import Image from "next/image";
-import { FaHeart } from "react-icons/fa";
 import { IoMdCloseCircle } from "react-icons/io";
 import { TiThMenu } from "react-icons/ti";
-import { IconButton } from "@/components/shared/IconButton";
 import { SearchBar } from "@/components/shared/SearchBar";
 import { Link } from "@/components/shared/Link";
 import { useBookSearchBar } from "@/features/books/hooks";
 import { BookSearchDropdown } from "@/features/books/components/BookSearchDropdown";
 import { CartMiniDropdown } from "@/features/cart/components/CartMiniDropdown";
+import { WishlistMiniDropdown } from "@/features/wishlists/components";
 import { UserMenu } from "@/features/auth/components/UserMenu";
 
 interface NavLink {
@@ -109,9 +108,7 @@ export function Navbar() {
           <div className="hidden lg:flex items-center gap-6 shrink-0">
             <CartMiniDropdown />
 
-            <NextLink href="/cliente/wishlist" aria-label="Favoritos">
-              <IconButton icon={FaHeart} label="Favoritos" />
-            </NextLink>
+            <WishlistMiniDropdown />
 
             <UserMenu variant="full" />
           </div>
@@ -148,16 +145,7 @@ export function Navbar() {
           }`}
         >
           <div className="px-6 py-6 flex flex-col gap-4 border-t border-primary-foreground/20">
-            <NextLink
-              href="/cliente/wishlist"
-              className="flex items-center gap-3 text-primary-foreground/80 hover:text-primary-foreground px-3 py-2.5 rounded-md hover:bg-accent/10 transition-colors text-sm font-medium"
-              onClick={closeMobileMenu}
-            >
-              <span className="rounded-full bg-accent flex items-center justify-center w-9 h-9 text-foreground">
-                <FaHeart size={18} aria-hidden="true" />
-              </span>
-              <span className="text-sm font-medium">Mis listas</span>
-            </NextLink>
+            <WishlistMiniDropdown variant="mobile" onAction={closeMobileMenu} />
 
             <UserMenu variant="compact" onAction={closeMobileMenu} />
           </div>
