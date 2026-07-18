@@ -50,9 +50,9 @@ export function BookCarousel({ title, books }: BookCarouselProps) {
     <>
       <div className="space-y-1">
         <h2 className="text-3xl font-bold text-foreground text-center flex items-center justify-center gap-4 sm:gap-6 lg:gap-12">
-          <WiStars className="text-accent" size={58} />
+          <WiStars className="text-foreground" size={58} />
           {title}
-          <GiKnockedOutStars className="text-accent" size={58} />
+          <GiKnockedOutStars className="text-foreground" size={58} />
         </h2>
 
         <div className="relative">
