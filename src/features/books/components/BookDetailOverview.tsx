@@ -3,6 +3,7 @@
 /**
  * Vista del libro con título, autores, rating, disponibilidad,
  * descripción, precio, selector de cantidad y botones de acción.
+ * Usa useBookCardActions para lógica de carrito/wishlist/auth.
  */
 import { useState } from "react";
 import {
@@ -17,49 +18,32 @@ import { StarRating } from "@/components/shared/StarRating";
 import { QuantitySelector } from "@/components/shared/QuantitySelector";
 import { formatPrice, formatAuthors, cn } from "@/lib/utils";
 import type { BookDetail } from "@/features/books/types";
-import { useAddToCart } from "@/features/cart/hooks";
+import { useBookCardActions } from "@/features/books/hooks";
 import { WishlistSelectDialog } from "@/features/wishlists/components/WishlistSelectDialog";
 import { AuthRequiredDialog } from "@/components/shared/AuthRequiredDialog";
-import type { WishlistResponse } from "@/features/wishlists/types";
 
 interface BookDetailOverviewProps {
   book: BookDetail;
-  isAuthenticated?: boolean;
-  wishlists?: WishlistResponse[];
-  wishlistsContainingBook?: number[];
-  isWishlistLoading?: boolean;
-  onAddToWishlist?: (wishlistId: number) => void;
 }
 
-export function BookDetailOverview({
-  book,
-  isAuthenticated = false,
-  wishlists = [],
-  wishlistsContainingBook = [],
-  isWishlistLoading = false,
-  onAddToWishlist,
-}: BookDetailOverviewProps) {
+export function BookDetailOverview({ book }: BookDetailOverviewProps) {
   const [quantity, setQuantity] = useState(1);
-  const [pickerOpen, setPickerOpen] = useState(false);
-  const [authDialogOpen, setAuthDialogOpen] = useState(false);
-  const addToCart = useAddToCart();
+  const {
+    addToCart,
+    wishlists,
+    selectedBook,
+    setSelectedBook,
+    authDialogOpen,
+    setAuthDialogOpen,
+    selectedBookStatus,
+    isBusy,
+    handleAddToWishlist,
+    handleSelectWishlist,
+  } = useBookCardActions();
 
   const BUTTON_BASE = "gap-2 h-10 md:h-11 rounded-lg transition-all text-sm md:text-base";
   const PRIMARY_BUTTON = "px-5 md:px-6 shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30";
   const OUTLINE_BUTTON = "px-5 md:px-4 border-primary/30 text-foreground hover:bg-primary/5 hover:border-primary/60";
-
-  const handleHeartClick = () => {
-    if (!isAuthenticated) {
-      setAuthDialogOpen(true);
-      return;
-    }
-    setPickerOpen(true);
-  };
-
-  const handleSelectWishlist = (wishlistId: number) => {
-    onAddToWishlist?.(wishlistId);
-    setPickerOpen(false);
-  };
 
   return (
     <Card className="max-w-2xl bg-transparent">
@@ -152,8 +136,8 @@ export function BookDetailOverview({
           </Button>
           <Button
             variant="outline"
-            onClick={handleHeartClick}
-            disabled={isWishlistLoading}
+            onClick={() => handleAddToWishlist(book)}
+            disabled={isBusy}
             className={cn(BUTTON_BASE, OUTLINE_BUTTON)}
           >
             <FaHeart size={16} aria-hidden="true" />
@@ -163,19 +147,21 @@ export function BookDetailOverview({
       </CardContent>
 
       <WishlistSelectDialog
-        open={pickerOpen}
+        open={!!selectedBook}
         title="Agregar a una lista"
         description={
           <>
             Elige una lista para{" "}
-            <span className="font-semibold text-foreground">"{book.title}"</span>
+            <span className="font-semibold text-foreground">
+              &quot;{selectedBook?.title ?? ""}&quot;
+            </span>
           </>
         }
-        wishlists={wishlists}
-        disabledIds={wishlistsContainingBook}
-        isLoading={isWishlistLoading}
+        wishlists={wishlists ?? []}
+        disabledIds={selectedBookStatus?.wishlists.map((wl) => wl.id) ?? []}
+        isLoading={isBusy}
         onSelect={handleSelectWishlist}
-        onCancel={() => setPickerOpen(false)}
+        onCancel={() => setSelectedBook(null)}
       />
 
       <AuthRequiredDialog
