@@ -47,7 +47,7 @@ export function BannerCarousel({ slides }: BannerCarouselProps) {
   );
 
   return (
-    <section aria-label="Banner">
+    <>
       <div className="relative overflow-hidden group">
         <div className={`bg-gradient-to-r ${GRADIENT}`}>
           <Carousel
@@ -153,6 +153,6 @@ export function BannerCarousel({ slides }: BannerCarouselProps) {
           />
         ))}
       </div>
-    </section>
+    </>
   );
 }
