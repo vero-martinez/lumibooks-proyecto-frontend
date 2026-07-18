@@ -7,12 +7,6 @@ import { BookCover } from "@/components/shared/BookCover";
 import { ErrorState } from "@/components/shared/ErrorState";
 import { BookDetailOverview } from "@/features/books/components/BookDetailOverview";
 import { AuthorResumeCard } from "@/features/authors/components/AuthorResumeCard";
-import { useAuthStore } from "@/stores/auth.store";
-import {
-  useBookWishlistStatus,
-  useWishlists,
-  useAddBookToWishlist,
-} from "@/features/wishlists/hooks";
 import NextLink from "next/link";
 import {
   Breadcrumb,
@@ -29,20 +23,7 @@ export default function BookDetailPage() {
   const { id } = useParams<{ id: string; slug: string }>();
   const bookId = Number(id) || 0;
 
-  const isAuthenticated = useAuthStore((s) => !!s.token);
-
   const { data: book, isLoading, isError } = useBookDetail(bookId);
-
-  const { data: wishlistStatus } = useBookWishlistStatus(bookId);
-  const { data: allWishlists } = useWishlists();
-  const addBookToWishlist = useAddBookToWishlist();
-
-  const wishlistsContainingBook = wishlistStatus?.wishlists.map((wl) => wl.id) ?? [];
-  const isWishlistBusy = addBookToWishlist.isPending;
-
-  const handleAddToWishlist = (wishlistId: number) => {
-    addBookToWishlist.mutate({ wishlistId, bookId });
-  };
 
   return (
     <main className="max-w-screen-xl mx-auto w-full p-4 md:p-8 lg:p-16">
@@ -79,14 +60,7 @@ export default function BookDetailPage() {
                 priority
                 className="w-48 md:w-64 lg:w-[320px] aspect-[2/3] lg:h-[480px] lg:aspect-auto rounded-lg shadow-lg"
               />
-              <BookDetailOverview
-                book={book}
-                isAuthenticated={isAuthenticated}
-                wishlists={allWishlists ?? []}
-                wishlistsContainingBook={wishlistsContainingBook}
-                isWishlistLoading={isWishlistBusy}
-                onAddToWishlist={handleAddToWishlist}
-              />
+              <BookDetailOverview book={book} />
             </div>
 
             <Separator className="my-12 bg-muted" />

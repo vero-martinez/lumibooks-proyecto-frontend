@@ -36,7 +36,7 @@ export const BookCard = memo(function BookCard({
 
   return (
     <Card className="shadow-lg shadow-foreground/30 bg-card w-full min-h-[300px] sm:min-h-[330px] md:min-h-[360px] lg:min-h-[390px] transition-shadow hover:shadow-xl">
-      <CardContent className="flex flex-col items-center p-3 md:p-6">
+      <CardContent className="flex flex-col items-center px-3 py-2 md:px-6 py-2">
         <Link href={detailUrl} className="flex flex-col items-center">
           {/* Portada */}
           <BookCover
@@ -47,7 +47,7 @@ export const BookCard = memo(function BookCard({
             className="w-[90px] h-[145px] sm:w-[105px] sm:h-[168px] md:w-[115px] md:h-[185px] lg:w-[125px] lg:h-[200px] shadow-sm rounded-lg"
           />
 
-          <div className="flex flex-col items-center gap-2 md:gap-3 text-card-foreground mt-2">
+          <div className="flex flex-col items-center gap-2 md:gap-2 text-card-foreground mt-2">
             {/* Título */}
             <h3 className="text-xs md:text-sm h-9 md:h-12 font-semibold line-clamp-2 text-center">
               {book.title}

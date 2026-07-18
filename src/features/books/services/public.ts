@@ -51,3 +51,19 @@ export async function getBookDetailService(id: number): Promise<BookDetail> {
   const { data } = await api.get(`/api/public/books/${id}`);
   return data;
 }
+
+/**
+ * Obtiene los 10 libros más recientes activos.
+ */
+export async function getLatestBooksService(): Promise<BookCard[]> {
+  const { data } = await api.get("/api/public/books/latest");
+  return data;
+}
+
+/**
+ * Obtiene los 10 libros mejor evaluados activos.
+ */
+export async function getTopRatedBooksService(): Promise<BookCard[]> {
+  const { data } = await api.get("/api/public/books/top-rated");
+  return data;
+}
