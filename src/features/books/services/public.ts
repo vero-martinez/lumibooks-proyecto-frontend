@@ -27,20 +27,24 @@ export async function getBookSuggestionsService(search: string): Promise<BookSug
 }
 
 /**
- * Obtiene todas las categorías activas disponibles
- * para los filtros del catálogo de libros.
+ * Obtiene todas las categorías activas disponibles.
+ * Soporta búsqueda opcional por nombre.
  */
-export async function getCategoriesService(): Promise<Category[]> {
-  const { data } = await api.get("/api/public/categories");
+export async function getCategoriesService(name?: string): Promise<Category[]> {
+  const { data } = await api.get("/api/public/categories", {
+    params: name ? { name } : undefined,
+  });
   return data;
 }
 
 /**
- * Obtiene todas las editoriales activas disponibles
- * para los filtros del catálogo de libros.
+ * Obtiene todas las editoriales activas disponibles.
+ * Soporta búsqueda opcional por nombre.
  */
-export async function getPublishersService(): Promise<Publisher[]> {
-  const { data } = await api.get("/api/public/publishers");
+export async function getPublishersService(name?: string): Promise<Publisher[]> {
+  const { data } = await api.get("/api/public/publishers", {
+    params: name ? { name } : undefined,
+  });
   return data;
 }
 
