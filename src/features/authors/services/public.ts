@@ -15,3 +15,14 @@ export async function getAuthorsService(filters: AuthorsFilters = {}): Promise<P
   const { data } = await api.get("/api/public/authors", { params: filters });
   return data;
 }
+
+/**
+ * Obtiene todos los autores activos sin paginación.
+ * Usado en selects/dropdowns de formularios de libros.
+ */
+export async function getAllAuthorsService(search?: string): Promise<AuthorPublicResponse[]> {
+  const { data } = await api.get("/api/public/authors/all", {
+    params: search ? { search } : undefined,
+  });
+  return data;
+}
