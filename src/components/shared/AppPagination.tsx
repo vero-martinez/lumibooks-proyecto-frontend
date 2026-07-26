@@ -29,6 +29,8 @@ interface AppPaginationProps {
   isLast: boolean;
   /** Callback al cambiar de página. Recibe la página (0-indexed) */
   onPageChange: (page: number) => void;
+  /** Texto informativo mostrado a la izquierda (ej. "Mostrando 1–10 de 50 libros") */
+  info?: string;
   className?: string;
 }
 
@@ -72,6 +74,7 @@ export function AppPagination({
   isFirst,
   isLast,
   onPageChange,
+  info,
   className,
 }: AppPaginationProps) {
   const pageNumbers = useMemo(
@@ -90,60 +93,65 @@ export function AppPagination({
   if (totalPages <= 1) return null;
 
   return (
-    <Pagination className={cn("mt-5", className)}>
-      <PaginationContent>
-        <PaginationItem>
-          <PaginationPrevious
-            href="#"
-            aria-label="Ir a página anterior"
-            aria-disabled={isFirst || undefined}
-            tabIndex={isFirst ? -1 : undefined}
-            onClick={(e) => !isFirst && handleNavigate(e, currentPage - 1)}
-            className={cn(
-              "transition-opacity",
-              isFirst ? "opacity-40 cursor-default" : "hover:opacity-80",
-            )}
-          />
-        </PaginationItem>
+    <div className={cn("flex flex-col items-center gap-2 sm:flex-row sm:items-center sm:justify-between", className)}>
+      {info && (
+        <span className="text-sm text-muted-foreground whitespace-nowrap">{info}</span>
+      )}
+      <Pagination className="w-auto mx-0">
+        <PaginationContent>
+          <PaginationItem>
+            <PaginationPrevious
+              href="#"
+              aria-label="Ir a página anterior"
+              aria-disabled={isFirst || undefined}
+              tabIndex={isFirst ? -1 : undefined}
+              onClick={(e) => !isFirst && handleNavigate(e, currentPage - 1)}
+              className={cn(
+                "transition-opacity",
+                isFirst ? "opacity-40 cursor-default" : "hover:opacity-80",
+              )}
+            />
+          </PaginationItem>
 
-        {pageNumbers.map((page, idx) =>
-          page === "ellipsis" ? (
-            <PaginationItem key={`ellipsis-${idx}`}>
-              <PaginationEllipsis />
-            </PaginationItem>
-          ) : (
-            <PaginationItem key={page}>
-              <PaginationLink
-                href="#"
-                isActive={currentPage === page}
-                onClick={(e) => handleNavigate(e, page)}
-                className={cn(
-                  "border transition-all duration-150",
-                  currentPage === page
-                    ? "bg-primary text-primary-foreground border-primary shadow-sm scale-105 cursor-default"
-                    : "border-primary bg-accent/70 hover:bg-accent cursor-pointer",
-                )}
-              >
-                {page + 1}
-              </PaginationLink>
-            </PaginationItem>
-          ),
-        )}
+          {pageNumbers.map((page, idx) =>
+            page === "ellipsis" ? (
+              <PaginationItem key={`ellipsis-${idx}`}>
+                <PaginationEllipsis />
+              </PaginationItem>
+            ) : (
+              <PaginationItem key={page}>
+                <PaginationLink
+                  href="#"
+                  isActive={currentPage === page}
+                  onClick={(e) => handleNavigate(e, page)}
+                  className={cn(
+                    "border transition-all duration-150",
+                    currentPage === page
+                      ? "bg-primary text-primary-foreground border-primary shadow-sm scale-105 cursor-default"
+                      : "border-primary bg-accent/70 hover:bg-accent cursor-pointer",
+                  )}
+                >
+                  {page + 1}
+                </PaginationLink>
+              </PaginationItem>
+            ),
+          )}
 
-        <PaginationItem>
-          <PaginationNext
-            href="#"
-            aria-label="Ir a página siguiente"
-            aria-disabled={isLast || undefined}
-            tabIndex={isLast ? -1 : undefined}
-            onClick={(e) => !isLast && handleNavigate(e, currentPage + 1)}
-            className={cn(
-              "transition-opacity",
-              isLast ? "opacity-40 cursor-default" : "hover:opacity-80",
-            )}
-          />
-        </PaginationItem>
-      </PaginationContent>
-    </Pagination>
+          <PaginationItem>
+            <PaginationNext
+              href="#"
+              aria-label="Ir a página siguiente"
+              aria-disabled={isLast || undefined}
+              tabIndex={isLast ? -1 : undefined}
+              onClick={(e) => !isLast && handleNavigate(e, currentPage + 1)}
+              className={cn(
+                "transition-opacity",
+                isLast ? "opacity-40 cursor-default" : "hover:opacity-80",
+              )}
+            />
+          </PaginationItem>
+        </PaginationContent>
+      </Pagination>
+    </div>
   );
 }
