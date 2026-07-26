@@ -33,13 +33,7 @@ export default function RootLayout({
     >
       <body className={`${geistSans.className} min-h-full flex flex-col`}>
         <Providers>
-          <Suspense fallback={null}>
-            <Navbar />
-          </Suspense>
-          <div className="flex-1">
-            {children}
-          </div>
-          <Footer />
+          {children}
         </Providers>
       </body>
     </html>
