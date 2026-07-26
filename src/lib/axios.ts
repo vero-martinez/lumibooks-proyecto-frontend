@@ -12,9 +12,6 @@ import { env } from "@/lib/env";
 // Instancia centralizada de Axios para comunicación con el backend Spring Boot.
 const api = axios.create({
     baseURL: env.apiUrl,
-    headers: {
-        "Content-Type": "application/json",
-    },
 });
 
 /**
