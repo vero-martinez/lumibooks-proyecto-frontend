@@ -1,13 +1,13 @@
 /**
  * Hook de TanStack Query para obtener las editoriales disponibles.
- * Usado en el filtro de editorial del catálogo.
+ * Soporta búsqueda opcional por nombre.
  */
 import { useQuery } from "@tanstack/react-query";
 import { getPublishersService } from "@/features/books/services";
 
-export function usePublishers() {
+export function usePublishers(name?: string) {
   return useQuery({
-    queryKey: ["publishers"],
-    queryFn: getPublishersService,
+    queryKey: ["publishers", name],
+    queryFn: () => getPublishersService(name),
   });
 }
