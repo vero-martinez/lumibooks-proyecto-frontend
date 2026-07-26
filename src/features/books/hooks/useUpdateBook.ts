@@ -42,7 +42,6 @@ export function useUpdateBook(id: number) {
     book: bookQuery.data,
     isLoading: bookQuery.isLoading,
     isError: bookQuery.isError,
-    updateBook: updateMutation.mutate,
-    isPending: updateMutation.isPending,
+    updateBook: updateMutation,
   };
 }
