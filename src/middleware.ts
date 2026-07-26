@@ -10,7 +10,7 @@ import type { NextRequest } from "next/server";
 
 // Rutas privadas y qué roles pueden acceder
 const roleRoutes: Record<string, string[]> = {
-    "/cliente": ["CLIENTE"],
+    "/client": ["CLIENTE"],
     "/gestor": ["GESTOR"],
     "/admin": ["ADMIN"],
 };
@@ -47,5 +47,5 @@ export function middleware(request: NextRequest) {
 
 export const config = {
     // Aplicar middleware solo a estas rutas
-    matcher: ["/cliente/:path*", "/gestor/:path*", "/admin/:path*"],
+    matcher: ["/client/:path*", "/gestor/:path*", "/admin/:path*"],
 };
