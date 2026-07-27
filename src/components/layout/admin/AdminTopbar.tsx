@@ -25,7 +25,7 @@ export function AdminTopbar() {
   }, [setOpenMobile]);
 
   return (
-    <div className="lg:hidden sticky top-0 z-50 bg-foreground shadow-lg mb-8">
+    <div className="lg:hidden sticky top-0 z-50 bg-foreground shadow-lg">
       <header className="w-full px-4 py-3">
         <div className="flex items-center justify-between gap-4">
           <Link
