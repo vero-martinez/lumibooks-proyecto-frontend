@@ -37,8 +37,8 @@ export function BookFiltersBar({ filters, updateFilters, onClear }: BookFiltersB
     "min-w-0 sm:min-w-[160px] w-full sm:w-auto bg-card hover:bg-muted border border-input";
 
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
-      <div className="w-full lg:w-[28rem] shrink-0">
+    <div className="flex flex-col gap-3">
+      <div className="w-full lg:w-1/2">
         <SearchBar
           value={searchInput}
           onChange={setSearchInput}
@@ -47,10 +47,8 @@ export function BookFiltersBar({ filters, updateFilters, onClear }: BookFiltersB
         />
       </div>
 
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3">
-        {hasActiveFilters && (
-          <ClearSearchButton onClick={handleClear} label="Limpiar filtros" />
-        )}
+      <div className="flex flex-wrap items-center gap-3">
+        
 
         <SortSelect
           value={filters.isActive === undefined ? undefined : String(filters.isActive)}
@@ -81,6 +79,10 @@ export function BookFiltersBar({ filters, updateFilters, onClear }: BookFiltersB
           className={SELECT_CLASS}
           options={ADMIN_BOOK_SORT_OPTIONS}
         />
+
+        {hasActiveFilters && (
+          <ClearSearchButton onClick={handleClear} label="Limpiar filtros" />
+        )}
       </div>
     </div>
   );
