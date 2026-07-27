@@ -13,6 +13,8 @@ import { FcAddImage } from "react-icons/fc";
 import { bookCreateSchema, BookCreateSchema } from "@/features/books/schemas";
 import { useCreateBook, useCategories, usePublishers } from "@/features/books/hooks";
 import { useAuthorsList } from "@/features/authors/hooks";
+import { BOOK_LANGUAGES, BOOK_FORMATS } from "@/features/books/constants/catalog.constants";
+import type { BookLanguage, BookFormat } from "@/features/books/types";
 
 import { FormField } from "@/components/shared/FormField";
 import { LoadingButton } from "@/components/shared/LoadingButton";
@@ -207,6 +209,7 @@ export function CreateBookForm() {
                         type="file"
                         accept="image/jpeg,image/jpg,image/png,image/webp"
                         className="sr-only"
+                        aria-label="Seleccionar imagen de portada"
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           if (file) {
@@ -239,7 +242,7 @@ export function CreateBookForm() {
                       <Select
                         value={watch("language")}
                         onValueChange={(val) =>
-                          setValue("language", val === "none" ? (undefined as unknown as "ESPAÑOL" | "INGLES") : val as "ESPAÑOL" | "INGLES", {
+                          setValue("language", val === "none" ? (undefined as unknown as BookLanguage) : val as BookLanguage, {
                             shouldValidate: true,
                           })
                         }
@@ -253,8 +256,11 @@ export function CreateBookForm() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="none" className="text-muted-foreground">Seleccionar</SelectItem>
-                          <SelectItem value="ESPAÑOL">Español</SelectItem>
-                          <SelectItem value="INGLES">Inglés</SelectItem>
+                          {BOOK_LANGUAGES.map((lang) => (
+                            <SelectItem key={lang.value} value={lang.value}>
+                              {lang.label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormField>
@@ -265,7 +271,7 @@ export function CreateBookForm() {
                         onValueChange={(val) =>
                           setValue(
                             "format",
-                            val === "none" ? (undefined as unknown as "TAPA_BLANDA" | "TAPA_DURA" | "BOLSILLO") : val as "TAPA_BLANDA" | "TAPA_DURA" | "BOLSILLO",
+                            val === "none" ? (undefined as unknown as BookFormat) : val as BookFormat,
                             { shouldValidate: true },
                           )
                         }
@@ -279,9 +285,11 @@ export function CreateBookForm() {
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="none" className="text-muted-foreground">Seleccionar</SelectItem>
-                          <SelectItem value="TAPA_BLANDA">Tapa blanda</SelectItem>
-                          <SelectItem value="TAPA_DURA">Tapa dura</SelectItem>
-                          <SelectItem value="BOLSILLO">Bolsillo</SelectItem>
+                          {BOOK_FORMATS.map((fmt) => (
+                            <SelectItem key={fmt.value} value={fmt.value}>
+                              {fmt.label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormField>
