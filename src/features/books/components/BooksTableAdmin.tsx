@@ -66,7 +66,7 @@ export function BooksTableAdmin({
   return (
     <div className="rounded-xl border border-border overflow-x-auto w-full">
       <Table className="text-sm">
-        <TableHeader>
+        <TableHeader className="[&_th]:px-6">
           <TableRow className="bg-foreground hover:bg-foreground [&_th]:text-white">
             <TableHead>ISBN</TableHead>
             <TableHead>Título</TableHead>
@@ -78,7 +78,7 @@ export function BooksTableAdmin({
             <TableHead>Acciones</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="[&_td]:p-6">
           {isLoading ? (
             <TableRow>
               <TableCell colSpan={COL_COUNT} className="h-32">
@@ -119,7 +119,7 @@ export function BooksTableAdmin({
                   {formatDate(book.createdAt)}
                 </TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-1">
+                  <div className="flex gap-1">
                     <Button
                       variant="ghost"
                       size="icon-xs"
