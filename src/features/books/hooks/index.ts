@@ -11,6 +11,7 @@ export * from "./usePublishers";
 export * from "./useBookSuggestions";
 export * from "./useBookDetail";
 export * from "./useAdminBooks";
+export * from "./useAdminBookDetail";
 export * from "./useUpdateBook";
 export * from "./useCreateBook"
 
