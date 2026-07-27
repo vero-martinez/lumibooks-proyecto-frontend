@@ -6,7 +6,7 @@
 
 import Link from "next/link";
 import { FaEye, FaPencilAlt, FaToggleOn, FaToggleOff } from "react-icons/fa";
-import { formatPrice, formatDate } from "@/lib/utils";
+import { cn, formatPrice, formatDate } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -32,6 +32,30 @@ interface BooksTableAdminProps {
   onToggleActive: (book: BookSummary) => void;
 }
 
+function ActiveBadge({ isActive }: { isActive: boolean }) {
+  return (
+    <Badge
+      variant={isActive ? "secondary" : "destructive"}
+      className={cn("text-sm font-medium", isActive && "bg-success-bg text-success")}
+    >
+      {isActive ? "Activo" : "Inactivo"}
+    </Badge>
+  );
+}
+
+function StockBadge({ stock }: { stock: number }) {
+  const isLow = stock <= STOCK_THRESHOLD;
+  return (
+    <Badge
+      variant={isLow ? "destructive" : "outline"}
+      className="text-sm font-medium"
+      aria-label={isLow ? "Stock bajo" : "Stock disponible"}
+    >
+      {stock}
+    </Badge>
+  );
+}
+
 export function BooksTableAdmin({
   books,
   isLoading,
@@ -40,18 +64,18 @@ export function BooksTableAdmin({
   onToggleActive,
 }: BooksTableAdminProps) {
   return (
-    <div className="rounded-xl border border-border overflow-x-auto">
-      <Table className="min-w-[700px] [&_td]:px-4 md:[&_td]:px-8 [&_th]:px-4 md:[&_th]:px-8 [&_td]:py-4 [&_th]:py-4 [&_td]:text-secondary-foreground">
+    <div className="rounded-xl border border-border overflow-x-auto w-full">
+      <Table className="text-sm">
         <TableHeader>
-          <TableRow className="bg-foreground hover:bg-foreground">
-            <TableHead className="text-white">ISBN</TableHead>
-            <TableHead className="text-white">Título</TableHead>
-            <TableHead className="text-white">Autores</TableHead>
-            <TableHead className="text-white">Precio</TableHead>
-            <TableHead className="text-white">Stock</TableHead>
-            <TableHead className="text-white">Estado</TableHead>
-            <TableHead className="text-white">Fecha</TableHead>
-            <TableHead className="text-white">Acciones</TableHead>
+          <TableRow className="bg-foreground hover:bg-foreground [&_th]:text-white">
+            <TableHead>ISBN</TableHead>
+            <TableHead>Título</TableHead>
+            <TableHead>Autores</TableHead>
+            <TableHead>Precio</TableHead>
+            <TableHead>Stock</TableHead>
+            <TableHead>Estado</TableHead>
+            <TableHead>Fecha</TableHead>
+            <TableHead>Acciones</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -69,8 +93,13 @@ export function BooksTableAdmin({
             </TableRow>
           ) : (
             books.map((book, i) => (
-              <TableRow key={book.id} className={`hover:bg-accent ${i % 2 === 0 ? "bg-card" : "bg-transparent"}`}>
-                <TableCell className="font-medium tracking-widest">{book.isbn}</TableCell>
+              <TableRow
+                key={book.id}
+                className={cn("hover:bg-accent", i % 2 === 0 && "bg-card")}
+              >
+                <TableCell className="font-medium tracking-widest">
+                  {book.isbn}
+                </TableCell>
                 <TableCell className="font-medium max-w-[200px] truncate">
                   {book.title}
                 </TableCell>
@@ -81,18 +110,10 @@ export function BooksTableAdmin({
                   {formatPrice(book.price)}
                 </TableCell>
                 <TableCell>
-                  <Badge
-                    variant={book.stock <= STOCK_THRESHOLD ? "destructive" : "outline"}
-                    className="text-sm font-medium"
-                    aria-label={book.stock <= STOCK_THRESHOLD ? "Stock bajo" : "Stock disponible"}
-                  >
-                    {book.stock}
-                  </Badge>
+                  <StockBadge stock={book.stock} />
                 </TableCell>
                 <TableCell>
-                  <Badge variant={book.isActive ? "secondary" : "destructive"} className={`text-sm font-medium ${book.isActive ? "bg-success-bg text-success" : ""}`}>
-                    {book.isActive ? "Activo" : "Inactivo"}
-                  </Badge>
+                  <ActiveBadge isActive={book.isActive} />
                 </TableCell>
                 <TableCell className="font-medium">
                   {formatDate(book.createdAt)}
@@ -108,11 +129,19 @@ export function BooksTableAdmin({
                     >
                       <FaEye aria-hidden="true" />
                     </Button>
-                    <Link href={`/admin/books/edit/${book.id}`}>
-                      <Button variant="ghost" size="icon-xs" aria-label={`Editar ${book.title}`} className="text-foreground">
+                    <Button
+                      variant="ghost"
+                      size="icon-xs"
+                      asChild
+                      className="text-foreground"
+                    >
+                      <Link
+                        href={`/admin/books/edit/${book.id}`}
+                        aria-label={`Editar ${book.title}`}
+                      >
                         <FaPencilAlt aria-hidden="true" />
-                      </Button>
-                    </Link>
+                      </Link>
+                    </Button>
                     <Button
                       variant="ghost"
                       size="icon-xs"
