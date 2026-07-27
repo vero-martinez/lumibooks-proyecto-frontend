@@ -18,6 +18,7 @@ import { LoadingState } from "@/components/shared/LoadingState";
 import { ErrorState } from "@/components/shared/ErrorState";
 import { useAdminBookDetail } from "@/features/books/hooks";
 import { BOOK_FORMATS, BOOK_LANGUAGES } from "@/features/books/constants/catalog.constants";
+import { STOCK_THRESHOLD } from "@/features/books/constants/admin.constants";
 import { formatPrice, formatDateTime } from "@/lib/utils";
 import type { BookAdminDetail } from "@/features/books/types";
 
@@ -26,8 +27,6 @@ interface BookDetailDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
-const STOCK_THRESHOLD = 10;
 
 function getLanguageLabel(value: string): string {
   return BOOK_LANGUAGES.find((l) => l.value === value)?.label ?? value;
@@ -109,7 +108,7 @@ export function BookDetailDialog({
         className="sm:max-w-3xl max-h-[85vh] overflow-y-auto p-0"
         showCloseButton={false}
       >
-        <div className="bg-primary text-primary-foreground px-10 py-4 rounded-t-lg flex items-center justify-between">
+        <div className="bg-primary text-primary-foreground px-4 sm:px-10 py-4 rounded-t-lg flex items-center justify-between">
           <DialogTitle className="text-lg">Detalle del Libro</DialogTitle>
           <DialogClose asChild>
             <Button variant="ghost" size="icon-sm" className="text-primary-foreground hover:bg-primary-foreground/20">
@@ -118,14 +117,14 @@ export function BookDetailDialog({
             </Button>
           </DialogClose>
         </div>
-        <div className="px-10 py-6">
+        <div className="px-4 sm:px-10 py-6">
           {isLoading ? (
             <LoadingState label="Cargando detalle..." />
           ) : isError ? (
             <ErrorState message="No se pudo cargar el detalle" />
           ) : book ? (
-            <div className="flex gap-6">
-              <div className="shrink-0 flex flex-col items-center gap-3 w-1/2">
+            <div className="flex flex-col lg:flex-row gap-6">
+              <div className="shrink-0 flex flex-col items-center gap-3 w-full lg:w-1/2">
                 <DialogHeader className="text-center">
                   <div className="flex items-center justify-center gap-2">
                     <span className="text-base font-semibold leading-snug">
@@ -161,7 +160,7 @@ export function BookDetailDialog({
                 )}
               </div>
 
-              <div className="w-1/2 space-y-4">
+              <div className="w-full lg:w-1/2 space-y-4">
                 <table className="w-full border-collapse text-sm" aria-label="Datos del libro">
                   <tbody>
                     {buildDetailRows(book).map((row, i) => (
