@@ -19,7 +19,7 @@ export function WishlistDetailHeader({ wishlist }: WishlistDetailHeaderProps) {
         <BreadcrumbList className="gap-2">
           <BreadcrumbItem className="uppercase">
             <BreadcrumbLink asChild>
-              <NextLink href="/wishlist">Mis listas</NextLink>
+              <NextLink href="/client/wishlist">Mis listas</NextLink>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />

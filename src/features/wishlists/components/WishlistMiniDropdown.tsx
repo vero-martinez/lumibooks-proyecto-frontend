@@ -94,7 +94,7 @@ function AuthenticatedDropdown({ onAction }: { onAction?: () => void }) {
               </p>
             </div>
             <Button asChild size="sm" className="mt-1">
-              <NextLink href="/wishlist" onClick={onAction}>
+              <NextLink href="/client/wishlist" onClick={onAction}>
                 Crear mi primera lista
               </NextLink>
             </Button>
@@ -104,7 +104,7 @@ function AuthenticatedDropdown({ onAction }: { onAction?: () => void }) {
             {wishlists.map((wishlist, index) => (
               <li key={wishlist.id}>
                 <NextLink
-                  href={`/wishlist/${wishlist.id}`}
+                  href={`/client/wishlist/${wishlist.id}`}
                   onClick={onAction}
                   className={`flex items-center gap-3 px-4 py-3 hover:bg-accent/30 transition-colors rounded-md ${
                     index < wishlists.length - 1 ? "border-b border-border/10" : ""
@@ -126,7 +126,7 @@ function AuthenticatedDropdown({ onAction }: { onAction?: () => void }) {
       {wishlists && wishlists.length > 0 && (
         <div className="border-t border-border/10 px-4 py-3">
           <Button asChild variant="ghost" size="sm" className="w-full justify-center text-sm text-foreground py-4">
-            <NextLink href="/wishlist" onClick={onAction}>
+            <NextLink href="/client/wishlist" onClick={onAction}>
               Ver todas mis listas
             </NextLink>
           </Button>

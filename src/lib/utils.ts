@@ -27,6 +27,17 @@ export function formatDate(dateStr: string): string {
   });
 }
 
+// Da formato a una fecha ISO con hora: "15 dic. 2025, 3:45 p. m."
+export function formatDateTime(dateStr: string): string {
+  return new Date(dateStr).toLocaleString("es-PE", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+}
+
 // Convierte un texto en un slug para URLs (sin tildes, sin espacios).
 export function slugify(text: string): string {
   return text

@@ -4,3 +4,4 @@
 
 // Datos del catálogo (TanStack Query)
 export * from "./useAuthors";
+export * from "./useAuthorsList";

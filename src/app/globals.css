@@ -115,8 +115,18 @@
   --star: #e8a317; /* Amarillo vivo para estrellas de rating */
 
   /* Status */
-  --success: #3f7c1c; /* Verde para texto Disponible */
-  --success-bg: #e6f5da; /* Fondo verde claro para badge Disponible */
+  --success: #389454; /* Verde para texto Disponible */
+  --success-bg: #c5efd4; /* Fondo verde claro para badge Disponible */
+
+  /* Sidebar */
+  --sidebar: #c43670;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: rgba(255, 255, 255, 0.15);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgba(255, 255, 255, 0.2);
+  --sidebar-ring: rgba(255, 255, 255, 0.3);
 
   /* Border radius */
   --radius: 0.625rem;
@@ -160,12 +170,11 @@
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground;
-    overflow-x: clip;
-  }
   html {
     @apply font-sans;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 

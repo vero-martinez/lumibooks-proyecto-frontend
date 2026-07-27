@@ -126,7 +126,7 @@ export function CartMiniDropdown() {
                   className="flex-1 text-xs py-4"
                 >
                   <Link
-                    href="/cart"
+                    href="/client/cart"
                     onClick={() => setOpen(false)}
                   >
                     Ver carrito

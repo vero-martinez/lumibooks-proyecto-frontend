@@ -21,7 +21,7 @@ export function WishlistCard({ wishlist, onRename, onDelete }: WishlistCardProps
   return (
     <div className="group flex flex-col bg-card border border-border/20 rounded-xl p-6 hover:border-border/40 hover:shadow-md transition-all">
       <NextLink
-        href={`/wishlist/${wishlist.id}`}
+        href={`/client/wishlist/${wishlist.id}`}
         className="flex-1 min-w-0 mb-6"
       >
         <div className="flex items-center justify-center size-12 rounded-full bg-primary/10 mx-auto mb-4">

@@ -25,7 +25,7 @@ export function useRegister() {
 
             toast.success(response.message);
 
-            router.push("/cliente/dashboard");
+            router.push("/client/dashboard");
         },
         onError: (error: Error) => {
             toast.error(error.message || "Error al registrarse");
