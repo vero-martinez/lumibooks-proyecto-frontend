@@ -21,6 +21,7 @@ import { BOOK_FORMATS, BOOK_LANGUAGES } from "@/features/books/constants/catalog
 import { STOCK_THRESHOLD } from "@/features/books/constants/admin.constants";
 import { formatPrice, formatDateTime } from "@/lib/utils";
 import type { BookAdminDetail } from "@/features/books/types";
+import { ActiveBadge } from "@/components/shared/ActiveBadge";
 
 interface BookDetailDialogProps {
   bookId: number | null;
@@ -130,12 +131,7 @@ export function BookDetailDialog({
                     <span className="text-base font-semibold leading-snug">
                       {book.title}
                     </span>
-                    <Badge
-                      variant={book.isActive ? "secondary" : "destructive"}
-                      className={book.isActive ? "bg-success-bg text-success" : ""}
-                    >
-                      {book.isActive ? "Activo" : "Inactivo"}
-                    </Badge>
+                    <ActiveBadge isActive={book.isActive} />
                   </div>
                 </DialogHeader>
                 <p className="text-sm text-muted-foreground text-center">
