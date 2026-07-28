@@ -1,0 +1,37 @@
+/**
+ * Información del autor en su página de detalle.
+ * Muestra imagen, nombre y biografía.
+ */
+import { UserAvatar } from "@/components/shared/UserAvatar";
+import type { AuthorDetail } from "@/features/authors/types";
+import { Card, CardContent } from "@/components/ui/card";
+
+interface AuthorInfoProps {
+  author: AuthorDetail;
+}
+
+export function AuthorInfo({ author }: AuthorInfoProps) {
+  const fullName = `${author.firstName} ${author.lastName}`;
+
+  return (
+    <Card className="p-12">
+      <CardContent className="flex flex-col sm:flex-row items-center sm:items-start gap-12 md:gap-10">
+        <UserAvatar
+          src={author.profileImageUrl}
+          name={fullName}
+          className="w-40 h-40 text-4xl font-extrabold ring-16 ring-foreground/40 text-foreground bg-foreground/10 shrink-0"
+        />
+        <div className="text-center sm:text-left">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+            {fullName}
+          </h1>
+          {author.biography && (
+            <p className="mt-4 text-secondary-foreground leading-relaxed text-justify">
+              {author.biography}
+            </p>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
