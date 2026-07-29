@@ -7,3 +7,7 @@ export * from "./useAuthors";
 export * from "./useAuthorsList";
 export * from "./useAuthorDetail";
 export * from "./useAuthorBooks";
+export * from "./useAdminAuthors";
+export * from "./useAdminAuthorDetail";
+export * from "./useCreateAuthor";
+export * from "./useUpdateAuthor";

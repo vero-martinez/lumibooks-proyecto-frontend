@@ -4,7 +4,6 @@
  */
 "use client";
 
-import Link from "next/link";
 import { FaEye, FaPencilAlt, FaToggleOn, FaToggleOff } from "react-icons/fa";
 import { cn, formatPrice, formatDate } from "@/lib/utils";
 import {
@@ -16,11 +15,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { LoadingState } from "@/components/shared/LoadingState";
 import { EmptyState } from "@/components/shared/EmptyState";
 import { STOCK_THRESHOLD } from "@/features/books/constants/admin.constants";
 import type { BookSummary } from "@/features/books/types";
+import { ActiveBadge } from "@/components/shared/ActiveBadge";
+import { TableActions } from "@/components/shared/TableActions";
 
 const COL_COUNT = 8;
 
@@ -30,17 +30,6 @@ interface BooksTableAdminProps {
   isToggling: boolean;
   onViewDetail: (id: number) => void;
   onToggleActive: (book: BookSummary) => void;
-}
-
-function ActiveBadge({ isActive }: { isActive: boolean }) {
-  return (
-    <Badge
-      variant={isActive ? "secondary" : "destructive"}
-      className={cn("text-sm font-medium", isActive && "bg-success-bg text-success")}
-    >
-      {isActive ? "Activo" : "Inactivo"}
-    </Badge>
-  );
 }
 
 function StockBadge({ stock }: { stock: number }) {
@@ -119,44 +108,13 @@ export function BooksTableAdmin({
                   {formatDate(book.createdAt)}
                 </TableCell>
                 <TableCell>
-                  <div className="flex gap-1">
-                    <Button
-                      variant="ghost"
-                      size="icon-xs"
-                      onClick={() => onViewDetail(book.id)}
-                      aria-label={`Ver detalle de ${book.title}`}
-                      className="text-foreground"
-                    >
-                      <FaEye aria-hidden="true" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon-xs"
-                      asChild
-                      className="text-foreground"
-                    >
-                      <Link
-                        href={`/admin/books/edit/${book.id}`}
-                        aria-label={`Editar ${book.title}`}
-                      >
-                        <FaPencilAlt aria-hidden="true" />
-                      </Link>
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon-xs"
-                      onClick={() => onToggleActive(book)}
-                      disabled={isToggling}
-                      aria-label={book.isActive ? `Desactivar ${book.title}` : `Activar ${book.title}`}
-                      className="text-foreground"
-                    >
-                      {book.isActive ? (
-                        <FaToggleOn aria-hidden="true" />
-                      ) : (
-                        <FaToggleOff aria-hidden="true" />
-                      )}
-                    </Button>
-                  </div>
+                  <TableActions
+                    actions={[
+                      { label: `Ver detalle de ${book.title}`, icon: <FaEye aria-hidden="true" />, onClick: () => onViewDetail(book.id) },
+                      { label: `Editar ${book.title}`, icon: <FaPencilAlt aria-hidden="true" />, href: `/admin/books/edit/${book.id}` },
+                      { label: book.isActive ? `Desactivar ${book.title}` : `Activar ${book.title}`, icon: book.isActive ? <FaToggleOn aria-hidden="true" /> : <FaToggleOff aria-hidden="true" />, onClick: () => onToggleActive(book), disabled: isToggling },
+                    ]}
+                  />
                 </TableCell>
               </TableRow>
             ))
