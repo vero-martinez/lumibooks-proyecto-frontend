@@ -94,7 +94,6 @@ export function AuthorFormDialog({
       biography: author.biography ?? "",
       profileImage: undefined,
     });
-    setImagePreview(null);
   }, [isEdit, author, open, reset]);
 
   // Resetear form al abrir en modo create
@@ -250,6 +249,16 @@ export function AuthorFormDialog({
                         src={imagePreview}
                         alt="Vista previa"
                         className="w-24 h-24 rounded-full object-cover"
+                      />
+                    </div>
+                  )}
+
+                  {!imagePreview && isEdit && author?.profileImageUrl && (
+                    <div className="flex justify-center">
+                      <img
+                        src={author.profileImageUrl}
+                        alt="Foto actual"
+                        className="w-24 h-24 rounded-full object-cover ring-2 ring-muted"
                       />
                     </div>
                   )}
