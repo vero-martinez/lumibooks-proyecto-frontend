@@ -139,6 +139,58 @@ export async function handleRefreshRequest(
 
 
 /**
+ * Cierra la sesión del usuario.
+ *
+ * Flujo:
+ *
+ * 1. Obtiene el Access Token del header Authorization.
+ * 2. Obtiene el Refresh Token de la cookie httpOnly.
+ * 3. Envía ambos al backend para invalidar la sesión.
+ * 4. Limpia las cookies locales aunque el backend no responda.
+ */
+export async function handleLogoutRequest(
+    request: NextRequest
+): Promise<NextResponse> {
+
+    // Obtiene el Access Token del header Authorization.
+    const accessToken =
+        request.headers.get("Authorization")?.replace("Bearer ", "") ?? null;
+
+    // Obtiene el refresh token de la cookie httpOnly.
+    const refreshToken = request.cookies.get(REFRESH_TOKEN_COOKIE)?.value ?? null;
+
+    // Best-effort: revoca la sesión en el backend.
+    // Si el backend está caído, igual limpia la sesión local.
+    try {
+        await fetch(`${env.apiUrl}/api/public/auth/logout`, {
+            method: "POST",
+            headers: {
+                ...(accessToken
+                    ? { Authorization: `Bearer ${accessToken}` }
+                    : {}),
+                ...(refreshToken
+                    ? { Cookie: `${REFRESH_TOKEN_COOKIE}=${refreshToken}` }
+                    : {}),
+            },
+        });
+    } catch {
+        // Backend caído: igual limpiamos la sesión local.
+    }
+
+    const response = NextResponse.json({ message: "Sesión cerrada" });
+
+    // Elimina cada cookie una sola vez.
+    // Enviar múltiples instrucciones para la misma cookie puede provocar
+    // que una sobrescriba a la otra y el navegador no la elimine correctamente.
+    response.cookies.set(AUTH_TOKEN_COOKIE, "", { ...SESSION_COOKIE_OPTIONS, expires: new Date(0), maxAge: 0 });
+    response.cookies.set(AUTH_ROLE_COOKIE, "", { ...SESSION_COOKIE_OPTIONS, expires: new Date(0), maxAge: 0 });
+    response.cookies.set(REFRESH_TOKEN_COOKIE, "", { ...REFRESH_COOKIE_OPTIONS, expires: new Date(0), maxAge: 0 });
+
+    return response;
+}
+
+
+/**
  * Construye la respuesta final que recibe el navegador.
  *
  * Agrega:
