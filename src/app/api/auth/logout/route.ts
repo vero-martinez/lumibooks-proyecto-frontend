@@ -1,16 +1,13 @@
 /**
- * Endpoint interno de Next.js para cerrar sesión.
- * Limpia las cookies httpOnly de autenticación.
+ * Ruta interna de Next.js para cerrar sesión.
+ *
+ * Delega la invalidación de la sesión al helper de autenticación
+ * y elimina las cookies de autenticación del navegador.
  */
 
-import { NextResponse } from "next/server";
-import { AUTH_COOKIE_OPTIONS } from "../cookie-options";
+import { NextRequest } from "next/server";
+import { handleLogoutRequest } from "../helpers";
 
-export async function POST() {
-    const response = NextResponse.json({ message: "Sesión cerrada" });
-
-    response.cookies.set("auth-token", "", { ...AUTH_COOKIE_OPTIONS, maxAge: 0 });
-    response.cookies.set("auth-role", "", { ...AUTH_COOKIE_OPTIONS, maxAge: 0 });
-
-    return response;
+export async function POST(request: NextRequest) {
+    return handleLogoutRequest(request);
 }

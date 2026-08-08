@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Providers } from "./providers";
+import { Providers } from "@/providers/Providers";
 import { Suspense } from "react";
 import { Footer } from "@/components/layout/footer/Footer";
 import { Navbar } from "@/components/layout/navbar/Navbar";

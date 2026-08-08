@@ -1,6 +1,6 @@
 /**
  * Store del carrito anónimo con persistencia en localStorage.
- * 
+ *
  * Funciones principales:
  * - Mantener items del carrito mientras el usuario no ha iniciado sesión.
  * - Fusionarse con el carrito del backend al iniciar sesión (merge).
@@ -34,7 +34,7 @@ export const useCartStore = create<CartState>()(
                         items: get().items.map((i) =>
                             i.bookId === item.bookId
                                 ? { ...i, quantity: i.quantity + item.quantity }
-                                : i
+                                : i,
                         ),
                     });
                 } else {
@@ -49,21 +49,28 @@ export const useCartStore = create<CartState>()(
                 if (quantity < 1) return;
                 set({
                     items: get().items.map((i) =>
-                        i.bookId === bookId ? { ...i, quantity } : i
+                        i.bookId === bookId ? { ...i, quantity } : i,
                     ),
                 });
             },
 
             clearCart: () => set({ items: [] }),
 
-            getTotalItems: () =>
-                get().items.reduce((acc, i) => acc + i.quantity, 0),
+            getTotalItems: () => get().items.reduce((acc, i) => acc + i.quantity, 0),
 
             getSubtotal: () =>
                 get().items.reduce((acc, i) => acc + i.unitPrice * i.quantity, 0),
         }),
         {
             name: "cart-storage", // clave en localStorage
-        }
-    )
+
+            /**
+             * Evita rehidratar el store desde localStorage al crearlo.
+             * La rehidratación se ejecuta manualmente en StoreHydrator
+             * después de que el componente se monta en el cliente,
+             * para que el SSR y el primer render del cliente coincidan.
+             */
+            skipHydration: true,
+        },
+    ),
 );

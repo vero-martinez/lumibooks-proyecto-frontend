@@ -1,8 +1,10 @@
 /**
- * Middleware de Next.js para proteger rutas según el rol del usuario.
+ * Proxy de Next.js para proteger rutas según el rol del usuario.
  * Se ejecuta en el servidor antes de renderizar cualquier página.
- * Leer el token del localStorage(solo existe en el navegador)
- * no es posible aquí, por eso usa las cookies(navegador y servidor).
+ *
+ * Como se ejecuta en el servidor, no puede leer el Access Token que vive
+ * en memoria (zustand) ni localStorage; por eso lee las cookies httpOnly
+ * auth-token y auth-role que crea el BFF (app/api/auth).
  */
 
 import { NextResponse } from "next/server";
@@ -15,7 +17,7 @@ const roleRoutes: Record<string, string[]> = {
     "/admin": ["ADMIN"],
 };
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     // Verificar si la ruta requiere autenticación

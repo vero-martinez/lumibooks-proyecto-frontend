@@ -1,7 +1,15 @@
 /**
  * Store global de autenticación usando Zustand.
- * Guarda el token JWT y los datos del usuario autenticado.
- * Persiste la sesión en localStorage para que no se pierda al recargar la página.
+ *
+ * Mantiene el Access Token en memoria y los datos del usuario autenticado.
+ *
+ * El Access Token NO se guarda en localStorage.
+ * Solo se persisten datos del usuario para conservar información básica
+ * al recargar la aplicación.
+ *
+ * Al iniciar nuevamente la aplicación, el token se obtiene mediante
+ * el refresh token almacenado en una cookie httpOnly, evitando exponer
+ * el JWT a XSS.
  */
 
 import { create } from "zustand";
@@ -19,13 +27,16 @@ interface AuthState {
     token: string | null;
     user: User | null;
 
-    // Guarda el token y los datos del usuario al hacer login o registro
+    // Guarda el Access Token y los datos del usuario después del login/register.
     setAuth: (token: string, user: User) => void;
 
-    // Limpia la sesión al hacer logout
+    // Actualiza únicamente el Access Token después de renovarlo.
+    setAccessToken: (token: string) => void;
+
+    // Elimina la sesión actual del usuario.
     logout: () => void;
 
-    // Verifica si el usuario está autenticado
+    // Comprueba si existe un Access Token válido en memoria.
     isAuthenticated: () => boolean;
 }
 
@@ -37,13 +48,43 @@ export const useAuthStore = create<AuthState>()(
 
             setAuth: (token, user) => set({ token, user }),
 
+            setAccessToken: (token) => set({ token }),
+
             logout: () => set({ token: null, user: null }),
 
             isAuthenticated: () => !!get().token,
         }),
         {
-            // Nombre de la clave en localStorage
+            // Nombre de la clave utilizada en localStorage.
             name: "auth-storage",
-        }
-    )
+
+            /**
+             * Evita rehidratar el store desde localStorage al crearlo.
+             * La rehidratación se ejecuta manualmente en StoreHydrator
+             * después de que el componente se monta en el cliente,
+             * para que el SSR y el primer render del cliente coincidan.
+             */
+            skipHydration: true,
+
+            /**
+             * Solo persiste los datos del usuario.
+             * El Access Token permanece únicamente en memoria.
+             */
+            partialize: (state) => ({
+                user: state.user,
+            }),
+
+            /**
+             * Evita recuperar un token antiguo guardado
+             * por la versión anterior que persistía el JWT.
+             *
+             * La sesión se restaura mediante el refresh token.
+             */
+            merge: (persisted, current) => ({
+                ...current,
+                ...(persisted as Partial<AuthState>),
+                token: null,
+            }),
+        },
+    ),
 );
