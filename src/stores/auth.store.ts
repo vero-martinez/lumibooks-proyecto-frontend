@@ -59,6 +59,14 @@ export const useAuthStore = create<AuthState>()(
             name: "auth-storage",
 
             /**
+             * Evita rehidratar el store desde localStorage al crearlo.
+             * La rehidratación se ejecuta manualmente en StoreHydrator
+             * después de que el componente se monta en el cliente,
+             * para que el SSR y el primer render del cliente coincidan.
+             */
+            skipHydration: true,
+
+            /**
              * Solo persiste los datos del usuario.
              * El Access Token permanece únicamente en memoria.
              */
@@ -77,6 +85,6 @@ export const useAuthStore = create<AuthState>()(
                 ...(persisted as Partial<AuthState>),
                 token: null,
             }),
-        }
-    )
+        },
+    ),
 );

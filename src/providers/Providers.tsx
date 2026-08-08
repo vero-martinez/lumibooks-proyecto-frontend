@@ -13,6 +13,7 @@ import { Toaster } from "sonner";
 import type { ReactNode } from "react";
 import { queryClient } from "@/lib/query-client";
 import { SessionGuard } from "./SessionGuard";
+import { StoreHydrator } from "./StoreHydrator";
 
 export function Providers({ children }: { children: ReactNode }) {
     return (
@@ -21,8 +22,11 @@ export function Providers({ children }: { children: ReactNode }) {
             {/* Restaura la sesión antes de renderizar la aplicación. */}
             <SessionGuard>{children}</SessionGuard>
 
+            {/* Rehidrata los stores persistidos tras el mount en el cliente. */}
+            <StoreHydrator />
+
             {/* Contenedor global para mostrar notificaciones (toast). */}
-            <Toaster position="top-right" richColors />
+            <Toaster position="top-center" richColors />
         </QueryClientProvider>
     );
 }
