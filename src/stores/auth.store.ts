@@ -16,7 +16,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Role } from "@/types/api.types";
 
-interface User {
+export interface User {
     email: string;
     firstName: string;
     lastName: string;
@@ -57,14 +57,6 @@ export const useAuthStore = create<AuthState>()(
         {
             // Nombre de la clave utilizada en localStorage.
             name: "auth-storage",
-
-            /**
-             * Evita rehidratar el store desde localStorage al crearlo.
-             * La rehidratación se ejecuta manualmente en StoreHydrator
-             * después de que el componente se monta en el cliente,
-             * para que el SSR y el primer render del cliente coincidan.
-             */
-            skipHydration: true,
 
             /**
              * Solo persiste los datos del usuario.
