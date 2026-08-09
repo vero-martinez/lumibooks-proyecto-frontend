@@ -14,9 +14,9 @@ import { useBookSuggestions } from "@/features/books/hooks/useBookSuggestions";
 import { useDebounce } from "@/hooks/useDebounce";
 import { MIN_SEARCH_LENGTH } from "@/features/books/constants/catalog.constants";
 import { buildBookDetailUrl } from "@/features/books/utils/buildBookDetailUrl";
+import { ROUTES } from "@/lib/routes";
 
-
-const BOOKS_PATH = "/books";
+const BOOKS_PATH = ROUTES.books;
 const SEARCH_DEBOUNCE_MS = 400;
 
 export function useBookSearchBar() {
@@ -60,15 +60,6 @@ export function useBookSearchBar() {
     [router],
   );
 
-  /** Submit del form: evita reload y va al catálogo. */
-  const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
-      goToCatalog(query);
-    },
-    [goToCatalog, query],
-  );
-
   /** Actualiza el input y abre el dropdown. */
   const handleChange = useCallback((value: string) => {
     setQuery(value);
@@ -90,7 +81,6 @@ export function useBookSearchBar() {
     showDropdown,
     handleChange,
     handleFocus,
-    handleSubmit,
     goToDetail,
     goToCatalog,
     close,
