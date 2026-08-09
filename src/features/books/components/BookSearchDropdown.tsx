@@ -3,10 +3,17 @@
 /**
  * Dropdown de sugerencias de búsqueda.
  * Se muestra debajo del SearchBar cuando hay query activa.
- * Muestra: loading, empty state, lista de sugerencias con portada, y botón "Ver todos".
+ * Muestra: loading, empty state, lista de sugerencias con portada, y "Ver todos".
  */
-import { BookCover } from "@/components/shared/BookCover";
 import { ImSpinner2 } from "react-icons/im";
+import { FaSearch } from "react-icons/fa";
+import { BookCover } from "@/components/shared/BookCover";
+import {
+  Command,
+  CommandList,
+  CommandEmpty,
+  CommandItem,
+} from "@/components/ui/command";
 import type { BookSuggestionResponse } from "@/features/books/types";
 
 interface BookSearchDropdownProps {
@@ -16,56 +23,6 @@ interface BookSearchDropdownProps {
   query: string;
   onSelectSuggestion: (id: number, title: string) => void;
   onViewAll: (query: string) => void;
-}
-
-interface SuggestionItemProps {
-  book: BookSuggestionResponse;
-  onSelect: (id: number, title: string) => void;
-}
-
-/** Item individual de sugerencia con portada, título y autor. */
-function SuggestionItem({ book, onSelect }: SuggestionItemProps) {
-  return (
-    <button
-      type="button"
-      onClick={() => onSelect(book.id, book.title)}
-      className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-accent/20 focus-visible:bg-accent/20 focus-visible:outline-none transition-colors first:rounded-t-xl last:rounded-b-xl"
-    >
-      <BookCover
-        src={book.coverImageUrl}
-        alt={book.title}
-        className="w-10 h-14 bg-muted shadow-sm"
-      />
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-semibold text-secondary-foreground">
-          {book.title}
-        </p>
-        <p className="truncate text-xs text-muted-foreground mt-0.5">
-          {book.author}
-        </p>
-      </div>
-    </button>
-  );
-}
-
-function DropdownLoading() {
-  return (
-    <div className="flex items-center justify-center py-6">
-      <ImSpinner2
-        size={20}
-        className="animate-spin text-primary"
-        aria-hidden="true"
-      />
-    </div>
-  );
-}
-
-function DropdownEmpty() {
-  return (
-    <p className="text-sm text-muted-foreground text-center py-6">
-      No se encontraron resultados.
-    </p>
-  );
 }
 
 export function BookSearchDropdown({
@@ -82,34 +39,81 @@ export function BookSearchDropdown({
   const hasNoResults = !isFetching && suggestions.length === 0;
 
   return (
-    <div
-      aria-label="Sugerencias de búsqueda"
-      aria-busy={isFetching}
-      className="absolute top-full left-0 right-0 mt-2 bg-background rounded-xl shadow-xl border border-border z-50 max-h-80 overflow-y-auto custom-scrollbar py-1"
-    >
-      <div aria-live="polite" aria-atomic="true">
-        {isFetching && <DropdownLoading />}
-        {hasNoResults && <DropdownEmpty />}
-      </div>
+    <Command className="absolute inset-x-0 top-full z-50 mt-2 h-auto overflow-hidden rounded-xl border border-border bg-popover p-0 text-popover-foreground shadow-xl">
+      <CommandList className="max-h-80 py-1">
+        {isFetching && (
+          <div
+            role="status"
+            className="flex flex-col items-center justify-center gap-2 py-8"
+          >
+            <ImSpinner2
+              size={18}
+              className="animate-spin text-primary"
+              aria-hidden="true"
+            />
+            <p className="text-xs text-muted-foreground">Buscando libros...</p>
+          </div>
+        )}
 
-      {hasSuggestions &&
-        suggestions.map((book) => (
-          <SuggestionItem
-            key={book.id}
-            book={book}
-            onSelect={onSelectSuggestion}
-          />
-        ))}
+        {hasNoResults && (
+          <CommandEmpty className="flex flex-col items-center gap-3 py-8 text-center">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-muted/50">
+              <FaSearch
+                size={15}
+                className="text-muted-foreground/60"
+                aria-hidden="true"
+              />
+            </span>
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-secondary-foreground">
+                Sin resultados para &quot;{query}&quot;
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Prueba con otro título, autor o palabra clave.
+              </p>
+            </div>
+          </CommandEmpty>
+        )}
+
+        {hasSuggestions && (
+          <div className="divide-y divide-border/10">
+            {suggestions.map((book) => (
+              <CommandItem
+                key={book.id}
+                value={String(book.id)}
+                onSelect={() => onSelectSuggestion(book.id, book.title)}
+                className="flex items-center gap-3 rounded-none px-4 py-3 transition-colors data-selected:bg-accent/20"
+              >
+                <BookCover
+                  src={book.coverImageUrl}
+                  alt={book.title}
+                  className="h-14 w-10 shrink-0 rounded-sm bg-muted shadow-sm"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-secondary-foreground">
+                    {book.title}
+                  </p>
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                    {book.author}
+                  </p>
+                </div>
+              </CommandItem>
+            ))}
+          </div>
+        )}
+      </CommandList>
 
       {hasSuggestions && (
-        <button
-          type="button"
-          onClick={() => onViewAll(query)}
-          className="w-full px-4 py-3.5 text-center text-sm font-semibold text-primary hover:bg-accent/30 focus-visible:bg-accent/30 focus-visible:outline-none transition-colors border-t border-border/50 rounded-b-xl"
+        <CommandItem
+          value="ver-todos"
+          onSelect={() => onViewAll(query)}
+          className="rounded-none border-t border-border/50 px-4 py-3.5 text-sm font-semibold text-primary transition-colors data-selected:bg-accent/30"
         >
-          Ver todos los resultados para &quot;{query}&quot;
-        </button>
+          <span className="w-full text-center">
+            Ver todos los resultados para &quot;{query}&quot;
+          </span>
+        </CommandItem>
       )}
-    </div>
+    </Command>
   );
 }
