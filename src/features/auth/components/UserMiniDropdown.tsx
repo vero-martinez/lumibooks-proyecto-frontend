@@ -14,15 +14,7 @@
 import NextLink from "next/link";
 import { FaUser } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
-import {
-  User,
-  Package,
-  MapPin,
-  Heart,
-  Lock,
-  ChevronDown,
-  type LucideIcon,
-} from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -32,23 +24,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { UserAvatar } from "@/components/shared/UserAvatar";
 import { ROUTES } from "@/lib/routes";
+import { ACCOUNT_LINKS } from "@/features/auth/constants/account-links.constants";
 import { useAuthStore, type User as AuthUser } from "@/stores/auth.store";
 import { useLogout } from "@/features/auth/hooks";
-
-/**
- * Opciones disponibles en la sección "Mi cuenta".
- */
-const ACCOUNT_LINKS: ReadonlyArray<{
-  href: string;
-  label: string;
-  icon: LucideIcon;
-}> = [
-  { href: ROUTES.client.profile, label: "Mi perfil", icon: User },
-  { href: ROUTES.client.orders, label: "Mis pedidos", icon: Package },
-  { href: ROUTES.client.addresses, label: "Mis direcciones", icon: MapPin },
-  { href: ROUTES.client.wishlist, label: "Mis listas de deseos", icon: Heart },
-  { href: ROUTES.client.password, label: "Mi contraseña", icon: Lock },
-];
 
 /**
  * Dropdown de cuenta para usuarios autenticados (desktop).
