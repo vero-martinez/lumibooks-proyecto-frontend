@@ -33,6 +33,9 @@ interface AuthState {
     // Actualiza únicamente el Access Token después de renovarlo.
     setAccessToken: (token: string) => void;
 
+    // Actualiza parcialmente los datos del usuario autenticado.
+    updateUser: (partial: Partial<User>) => void;
+
     // Elimina la sesión actual del usuario.
     logout: () => void;
 
@@ -49,6 +52,11 @@ export const useAuthStore = create<AuthState>()(
             setAuth: (token, user) => set({ token, user }),
 
             setAccessToken: (token) => set({ token }),
+
+            updateUser: (partial) =>
+                set((state) => ({
+                    user: state.user ? { ...state.user, ...partial } : state.user,
+                })),
 
             logout: () => set({ token: null, user: null }),
 
