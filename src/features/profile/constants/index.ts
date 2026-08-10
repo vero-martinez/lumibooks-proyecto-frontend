@@ -48,3 +48,6 @@ export const PROFILE_SUBSCRIPTION = {
     badgeSubscribed: "Suscrito",
     badgeNotSubscribed: "No suscrito",
 };
+
+// Tamaño de los iconos de las filas de información
+export const INFO_ICON_SIZE = 17;

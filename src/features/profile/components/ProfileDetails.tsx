@@ -15,6 +15,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import {
     CELLPHONE_FALLBACK,
+    INFO_ICON_SIZE,
     PROFILE_FIELD_LABELS,
     PROFILE_SUBSCRIPTION,
 } from "@/features/profile/constants";
@@ -51,7 +52,7 @@ function ProfileSubscription({ isSubscribed }: { isSubscribed: boolean }) {
         <div className="flex items-center justify-between gap-4 rounded-xl border border-border/15 bg-muted/20 px-5 py-4">
             <div className="flex items-center gap-4 min-w-0">
                 <div className="size-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                    <FaEnvelopeOpenText size={17} className="text-primary" aria-hidden="true" />
+                    <FaEnvelopeOpenText size={INFO_ICON_SIZE} className="text-primary" aria-hidden="true" />
                 </div>
                 <div className="min-w-0">
                     <p className="text-base font-medium text-secondary-foreground">
@@ -81,22 +82,22 @@ export function ProfileDetails({ profile }: ProfileDetailsProps) {
 
     const infoRows = [
         {
-            icon: <FaUser size={17} className="text-primary" aria-hidden="true" />,
+            icon: <FaUser size={INFO_ICON_SIZE} className="text-primary" aria-hidden="true" />,
             label: PROFILE_FIELD_LABELS.fullName,
             value: `${firstName} ${lastName}`,
         },
         {
-            icon: <FaPhone size={17} className="text-primary" aria-hidden="true" />,
+            icon: <FaPhone size={INFO_ICON_SIZE} className="text-primary" aria-hidden="true" />,
             label: PROFILE_FIELD_LABELS.cellphone,
             value: cellphone ?? CELLPHONE_FALLBACK,
         },
         {
-            icon: <FaEnvelope size={17} className="text-primary" aria-hidden="true" />,
+            icon: <FaEnvelope size={INFO_ICON_SIZE} className="text-primary" aria-hidden="true" />,
             label: PROFILE_FIELD_LABELS.email,
             value: email,
         },
         {
-            icon: <FaCreditCard size={17} className="text-primary" aria-hidden="true" />,
+            icon: <FaCreditCard size={INFO_ICON_SIZE} className="text-primary" aria-hidden="true" />,
             label: PROFILE_FIELD_LABELS.dni,
             value: dni,
         },
