@@ -52,7 +52,7 @@ export default function WishlistDetailPage() {
   if (isError) return <ErrorState message="Error al cargar la lista" onRetry={() => refetch()} />;
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="mx-auto max-w-3xl pb-10 space-y-6">
       <WishlistDetailHeader wishlist={wishlist} />
 
       {!wishlist || wishlist.books.length === 0 ? (

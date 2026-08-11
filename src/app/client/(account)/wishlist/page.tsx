@@ -19,7 +19,6 @@ import { LoadingState } from "@/components/shared/LoadingState";
 import { ErrorState } from "@/components/shared/ErrorState";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 
 type ModalState =
   | { type: "closed" }
@@ -71,7 +70,7 @@ export default function WishlistsPage() {
     );
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-16">
+    <div className="mx-auto max-w-3xl pb-10 space-y-6">
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <h1 className="text-2xl font-bold text-foreground">
@@ -89,7 +88,6 @@ export default function WishlistsPage() {
         </p>
         {wishlists && wishlists.length > 0 && (
           <>
-            <Separator className="mb-6" />
             <div className="flex justify-end">
               <Button onClick={() => setModal({ type: "create" })}>
                 <FaPlus size={14} aria-hidden="true" />
