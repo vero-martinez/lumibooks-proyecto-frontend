@@ -16,6 +16,21 @@ export const ROUTES = {
     wishlist: "/client/wishlist",
     password: "/client/password",
   },
+  admin: {
+    dashboard: "/admin/dashboard",
+    books: "/admin/books",
+    orders: "/admin/orders",
+    users: "/admin/users",
+    reviews: "/admin/reviews",
+    banners: "/admin/banners",
+    history: "/admin/history",
+    subscriptions: "/admin/subscriptions",
+    catalog: {
+      authors: "/admin/catalog/authors",
+      categories: "/admin/catalog/categories",
+      publishers: "/admin/catalog/publishers",
+    },
+  },
 } as const;
 
 /**
