@@ -7,10 +7,13 @@
  * 2. Envía la información al backend Spring Boot.
  * 3. Recibe los tokens generados por el backend.
  * 4. Crea las cookies httpOnly que almacenará el navegador.
+ *
+ * Los endpoints públicos sin sesión (forgot-password y reset-password)
+ * solo reenvían la petición sin manejo de cookies.
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { AuthResponse } from "@/types/api.types";
+import { AuthResponse } from "@/features/auth/types";
 import { env } from "@/lib/env";
 import {
     AUTH_TOKEN_COOKIE,
@@ -25,7 +28,6 @@ import {
  * desde el header Set-Cookie que devuelve Spring Boot.
  */
 const REFRESH_COOKIE_RE = new RegExp(`^${REFRESH_TOKEN_COOKIE}=([^;]+)`);
-
 
 /**
  * Envía una petición de login o registro al backend.
@@ -65,7 +67,7 @@ export async function handleAuthRequest(
         }
 
         // Si todo salió bien, crea la respuesta con las cookies.
-        return buildAuthResponse(data as AuthResponse, response);
+        return buildAuthResponse(data, response);
 
     } catch {
         // Error de conexión, servidor caído, etc.
@@ -76,6 +78,51 @@ export async function handleAuthRequest(
     }
 }
 
+/**
+ * Reenvía peticiones públicas desde Next.js hacia el backend.
+ *
+ * Se utiliza para endpoints que no requieren una sesión activa ni
+ * generan tokens o cookies de autenticación, como la recuperación
+ * y el restablecimiento de contraseña.
+ *
+ * El flujo consiste en recibir la petición del cliente, enviarla
+ * al backend y devolver su respuesta manteniendo el mismo estado HTTP.
+ *
+ * A diferencia de las peticiones de autenticación, no crea ni modifica
+ * cookies, ya que estos endpoints no inician ni mantienen una sesión.
+ */
+export async function handlePublicRequest(
+    endpoint: string,
+    body: unknown
+): Promise<NextResponse> {
+    try {
+        // Envía la petición desde Next.js hacia Spring Boot.
+        const response = await fetch(
+            `${env.apiUrl}${endpoint}`,
+            {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
+            }
+        );
+
+        // Intenta leer la respuesta del backend.
+        const data = await response.json().catch(() => null);
+
+        // Reenvía la misma respuesta (éxito o error) al cliente.
+        return NextResponse.json(
+            data ?? { message: "Error del servidor" },
+            { status: response.status }
+        );
+
+    } catch {
+        // Error de conexión, servidor caído, etc.
+        return NextResponse.json(
+            { message: "Error interno del servidor" },
+            { status: 500 }
+        );
+    }
+}
 
 /**
  * Renueva la sesión del usuario.
@@ -121,13 +168,25 @@ export async function handleRefreshRequest(
         const data: AuthResponse | null = await response.json().catch(() => null);
 
         if (!response.ok) {
+            // Si el refresh token es inválido o expiró (401/403), la sesión
+            // ya no es recuperable: se limpian las cookies para evitar que
+            // el cliente siga reintentando renovar una sesión muerta.
+            if (response.status === 401 || response.status === 403) {
+                const errorResponse = NextResponse.json(
+                    data ?? { message: "La sesión expiró" },
+                    { status: response.status }
+                );
+                clearAuthCookies(errorResponse);
+                return errorResponse;
+            }
+
             return NextResponse.json(
                 data ?? { message: "Error del servidor" },
                 { status: response.status }
             );
         }
 
-        return buildAuthResponse(data as AuthResponse, response);
+        return buildAuthResponse(data, response);
 
     } catch {
         return NextResponse.json(
@@ -136,7 +195,6 @@ export async function handleRefreshRequest(
         );
     }
 }
-
 
 /**
  * Cierra la sesión del usuario.
@@ -179,16 +237,33 @@ export async function handleLogoutRequest(
 
     const response = NextResponse.json({ message: "Sesión cerrada" });
 
-    // Elimina cada cookie una sola vez.
-    // Enviar múltiples instrucciones para la misma cookie puede provocar
-    // que una sobrescriba a la otra y el navegador no la elimine correctamente.
-    response.cookies.set(AUTH_TOKEN_COOKIE, "", { ...SESSION_COOKIE_OPTIONS, expires: new Date(0), maxAge: 0 });
-    response.cookies.set(AUTH_ROLE_COOKIE, "", { ...SESSION_COOKIE_OPTIONS, expires: new Date(0), maxAge: 0 });
-    response.cookies.set(REFRESH_TOKEN_COOKIE, "", { ...REFRESH_COOKIE_OPTIONS, expires: new Date(0), maxAge: 0 });
+    // Elimina las cookies de sesión.
+    clearAuthCookies(response);
 
     return response;
 }
 
+/**
+ * Elimina las cookies de sesión del navegador.
+ *
+ * Se utiliza en logout y cuando un refresh token deja de ser válido.
+ *
+ * Cada cookie se limpia una sola vez. Enviar múltiples instrucciones para
+ * la misma cookie puede provocar que una sobrescriba a la otra y el
+ * navegador no la elimine correctamente.
+ */
+function clearAuthCookies(response: NextResponse): void {
+
+    response.cookies.set(
+        AUTH_TOKEN_COOKIE, "",
+        { ...SESSION_COOKIE_OPTIONS, expires: new Date(0), maxAge: 0 });
+    response.cookies.set(
+        AUTH_ROLE_COOKIE, "",
+        { ...SESSION_COOKIE_OPTIONS, expires: new Date(0), maxAge: 0 });
+    response.cookies.set(
+        REFRESH_TOKEN_COOKIE, "",
+        { ...REFRESH_COOKIE_OPTIONS, expires: new Date(0), maxAge: 0 });
+}
 
 /**
  * Construye la respuesta final que recibe el navegador.
@@ -199,11 +274,23 @@ export async function handleLogoutRequest(
  * - Refresh Token
  *
  * Cada uno se almacena como cookie httpOnly.
+ *
+ * Si el backend no envía token o rol, se responde 502 para no crear
+ * una sesión con cookies inválidas.
  */
 function buildAuthResponse(
-    data: AuthResponse,
+    data: AuthResponse | null,
     response: Response
 ): NextResponse {
+
+    // Valida que la respuesta del backend contenga los datos mínimos
+    // para crear la sesión. Sin esto, se guardaría el string "undefined".
+    if (!data?.token || !data?.role) {
+        return NextResponse.json(
+            { message: "Respuesta inválida del servidor" },
+            { status: 502 }
+        );
+    }
 
     // Crea la respuesta JSON que será enviada al frontend.
     const nextResponse = NextResponse.json(data, {
@@ -218,7 +305,6 @@ function buildAuthResponse(
         SESSION_COOKIE_OPTIONS
     );
 
-
     // Guarda el rol del usuario para que el middleware
     // pueda validar permisos de acceso.
     nextResponse.cookies.set(
@@ -227,10 +313,8 @@ function buildAuthResponse(
         SESSION_COOKIE_OPTIONS
     );
 
-
     // Obtiene el refresh token que Spring envió en Set-Cookie.
     const refreshToken = extractRefreshToken(response);
-
 
     // Si existe, lo guarda en una cookie httpOnly.
     if (refreshToken) {
@@ -240,7 +324,6 @@ function buildAuthResponse(
             REFRESH_COOKIE_OPTIONS
         );
     }
-
 
     return nextResponse;
 }
@@ -258,7 +341,6 @@ function extractRefreshToken(response: Response): string | null {
 
     const setCookies = headers.getSetCookie?.() ?? [];
 
-
     // Busca la cookie que contiene el refresh token.
     for (const header of setCookies) {
         const match = header.match(REFRESH_COOKIE_RE);
@@ -268,7 +350,6 @@ function extractRefreshToken(response: Response): string | null {
             return match[1];
         }
     }
-
 
     // Si no encuentra la cookie, devuelve null.
     return null;
