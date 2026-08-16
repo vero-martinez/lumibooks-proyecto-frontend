@@ -16,7 +16,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { Role } from "@/types/api.types";
 
-interface User {
+export interface User {
     email: string;
     firstName: string;
     lastName: string;
@@ -32,6 +32,9 @@ interface AuthState {
 
     // Actualiza únicamente el Access Token después de renovarlo.
     setAccessToken: (token: string) => void;
+
+    // Actualiza parcialmente los datos del usuario autenticado.
+    updateUser: (partial: Partial<User>) => void;
 
     // Elimina la sesión actual del usuario.
     logout: () => void;
@@ -50,6 +53,11 @@ export const useAuthStore = create<AuthState>()(
 
             setAccessToken: (token) => set({ token }),
 
+            updateUser: (partial) =>
+                set((state) => ({
+                    user: state.user ? { ...state.user, ...partial } : state.user,
+                })),
+
             logout: () => set({ token: null, user: null }),
 
             isAuthenticated: () => !!get().token,
@@ -57,14 +65,6 @@ export const useAuthStore = create<AuthState>()(
         {
             // Nombre de la clave utilizada en localStorage.
             name: "auth-storage",
-
-            /**
-             * Evita rehidratar el store desde localStorage al crearlo.
-             * La rehidratación se ejecuta manualmente en StoreHydrator
-             * después de que el componente se monta en el cliente,
-             * para que el SSR y el primer render del cliente coincidan.
-             */
-            skipHydration: true,
 
             /**
              * Solo persiste los datos del usuario.

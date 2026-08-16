@@ -72,3 +72,43 @@ export const registerSchema = z.object({
 // Tipos inferidos desde los schemas
 export type LoginSchema = z.infer<typeof loginSchema>;
 export type RegisterSchema = z.infer<typeof registerSchema>;
+
+// Schema de validación del formulario para solicitar el código de recuperación
+export const forgotPasswordSchema = z.object({
+    email: z
+        .string()
+        .min(1, "El email es obligatorio")
+        .email("El email no tiene un formato válido")
+        .max(150, "El email no puede superar los 150 caracteres"),
+});
+
+// Schema de validación del paso intermedio donde se ingresa el código
+export const resetCodeSchema = z.object({
+    code: z
+        .string()
+        .min(1, "El código es obligatorio")
+        .regex(/^[0-9]{6}$/, "El código debe tener exactamente 6 dígitos"),
+});
+
+// Schema de validación del formulario para restablecer la contraseña.
+// El email y el código provienen de pasos anteriores,
+// por lo que aquí solo se validan la nueva contraseña y su confirmación.
+export const resetPasswordSchema = z
+    .object({
+        newPassword: z
+            .string()
+            .min(1, "La contraseña es obligatoria")
+            .min(8, "La contraseña debe tener al menos 8 caracteres"),
+        confirmPassword: z
+            .string()
+            .min(1, "Confirma tu contraseña"),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+        message: "Las contraseñas no coinciden",
+        path: ["confirmPassword"],
+    });
+
+// Tipos inferidos desde los schemas de recuperación
+export type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
+export type ResetCodeSchema = z.infer<typeof resetCodeSchema>;
+export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>;

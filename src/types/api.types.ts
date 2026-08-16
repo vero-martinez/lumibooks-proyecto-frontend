@@ -6,17 +6,6 @@
 // Roles disponibles en el sistema
 export type Role = "ADMIN" | "GESTOR" | "CLIENTE";
 
-// Respuesta del endpoint de login y registro
-export interface AuthResponse {
-    token: string;
-    tokenType: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    role: Role;
-    message: string;
-}
-
 // Respuesta paginada de Spring Boot
 export interface PageResponse<T> {
     content: T[];
@@ -26,4 +15,9 @@ export interface PageResponse<T> {
     size: number;
     first: boolean;
     last: boolean;
+}
+
+// Respuesta genérica con mensaje del backend
+export interface ApiResponse {
+    message: string;
 }

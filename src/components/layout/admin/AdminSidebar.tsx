@@ -24,7 +24,9 @@ import {
 import { FaUser } from "react-icons/fa6";
 import { IoLogOut, IoHome } from "react-icons/io5";
 import { useAuthStore } from "@/stores/auth.store";
+import { useLogout } from "@/features/auth/hooks";
 import { UserAvatar } from "@/components/shared/UserAvatar";
+import { ROUTES } from "@/lib/routes";
 import {
   Sidebar,
   SidebarContent,
@@ -62,21 +64,21 @@ type SidebarItemData =
 const SIDEBAR_ITEMS: SidebarItemData[] = [
   {
     type: "link",
-    href: "/admin/dashboard",
+    href: ROUTES.admin.dashboard,
     label: "Dashboard",
     icon: IoHome,
     exact: true,
   },
-  { type: "link", href: "/admin/books", label: "Libros", icon: FaBook },
+  { type: "link", href: ROUTES.admin.books, label: "Libros", icon: FaBook },
   {
     type: "catalog",
     label: "Catálogo",
     icon: FaListUl,
     children: [
-      { href: "/admin/catalog/authors", label: "Autores", icon: FaUser },
-      { href: "/admin/catalog/categories", label: "Categorías", icon: FaTag },
+      { href: ROUTES.admin.catalog.authors, label: "Autores", icon: FaUser },
+      { href: ROUTES.admin.catalog.categories, label: "Categorías", icon: FaTag },
       {
-        href: "/admin/catalog/publishers",
+        href: ROUTES.admin.catalog.publishers,
         label: "Editoriales",
         icon: FaBuilding,
       },
@@ -84,17 +86,17 @@ const SIDEBAR_ITEMS: SidebarItemData[] = [
   },
   {
     type: "link",
-    href: "/admin/orders",
+    href: ROUTES.admin.orders,
     label: "Pedidos",
     icon: FaShoppingCart,
   },
-  { type: "link", href: "/admin/users", label: "Usuarios", icon: FaUsers },
-  { type: "link", href: "/admin/reviews", label: "Reseñas", icon: FaStar },
-  { type: "link", href: "/admin/banners", label: "Banners", icon: FaImage },
-  { type: "link", href: "/admin/history", label: "Historial", icon: FaHistory },
+  { type: "link", href: ROUTES.admin.users, label: "Usuarios", icon: FaUsers },
+  { type: "link", href: ROUTES.admin.reviews, label: "Reseñas", icon: FaStar },
+  { type: "link", href: ROUTES.admin.banners, label: "Banners", icon: FaImage },
+  { type: "link", href: ROUTES.admin.history, label: "Historial", icon: FaHistory },
   {
     type: "link",
-    href: "/admin/subscriptions",
+    href: ROUTES.admin.subscriptions,
     label: "Suscripciones",
     icon: FaCreditCard,
   },
@@ -102,7 +104,8 @@ const SIDEBAR_ITEMS: SidebarItemData[] = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
-  const { user, logout } = useAuthStore();
+  const user = useAuthStore((s) => s.user);
+  const { mutate: handleLogout } = useLogout();
   const [openGroups, setOpenGroups] = useState<Set<string>>(
     new Set(["Catálogo"]),
   );
@@ -122,37 +125,44 @@ export function AdminSidebar() {
   return (
     <Sidebar
       aria-label="Menú de administración"
-      className="rounded-r-2xl overflow-hidden"
+      className="rounded-r-2xl overflow-hidden border-r border-sidebar-border/60 shadow-sm"
     >
-      <SidebarHeader className="hidden lg:flex flex-col items-center py-6">
+      {/* Header */}
+      <SidebarHeader className="hidden lg:flex flex-col items-center py-7">
         <Link
-          href="/admin/dashboard"
+          href={ROUTES.admin.dashboard}
           className="flex flex-col items-center gap-2"
         >
-          <Image
-            src="/logo.svg"
-            alt="LumiBooks"
-            width={64}
-            height={64}
-            className="transition-opacity duration-200"
-          />
-          <span className="text-xl font-bold tracking-tight drop-shadow-sm">
+          <span className="grid place-items-center rounded-2xl bg-sidebar-accent/40 p-2.5 ring-1 ring-sidebar-border/50 transition-all duration-200 group-hover:ring-primary/40 group-focus-visible:ring-2 group-focus-visible:ring-primary">
+            <Image
+              src="/logo.svg"
+              alt="LumiBooks"
+              width={40}
+              height={40}
+              className="transition-transform duration-200 group-hover:scale-105"
+            />
+          </span>
+          <span className="text-lg font-bold tracking-tight">
             LumiBooks
+          </span>
+          <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-sidebar-foreground/45">
+            Panel admin
           </span>
         </Link>
       </SidebarHeader>
 
       <SidebarSeparator />
 
+      {/* Navegación */}
       <SidebarContent>
-        <SidebarGroup className="p-6">
+        <SidebarGroup className="px-4 py-5">
           <SidebarGroupContent>
-            <SidebarMenu className="gap-2 text-base">
+            <SidebarMenu className="gap-1 text-[0.925rem]">
               {SIDEBAR_ITEMS.map((item) => {
                 if (item.type === "catalog") {
                   const isOpen = openGroups.has(item.label);
-                  const hasActiveChild = item.children.some((child) =>
-                    pathname.startsWith(child.href),
+                  const hasActiveChild = item.children.some((c) =>
+                    pathname.startsWith(c.href),
                   );
 
                   return (
@@ -162,14 +172,16 @@ export function AdminSidebar() {
                           onClick={() => toggleGroup(item.label)}
                           aria-expanded={isOpen}
                           aria-controls={`sidebar-group-${item.label}`}
-                          className="gap-2 data-active:bg-accent data-active:text-accent-foreground justify-between"
+                          className={`justify-between gap-2 rounded-xl px-3 py-2.5 transition-colors duration-150 hover:bg-sidebar-accent/60 ${
+                            hasActiveChild ? "font-semibold" : ""
+                          }`}
                         >
-                          <span className="flex items-center gap-2">
-                            <item.icon size={18} />
+                          <span className="flex items-center gap-3">
+                            <item.icon size={17} />
                             <span>{item.label}</span>
                           </span>
                           <FaChevronDown
-                            size={12}
+                            size={11}
                             className={`transition-transform duration-200 ${
                               isOpen ? "rotate-180" : ""
                             }`}
@@ -177,24 +189,40 @@ export function AdminSidebar() {
                         </SidebarMenuButton>
                       </SidebarMenuItem>
 
-                      {isOpen && (
-                        <div id={`sidebar-group-${item.label}`}>
-                          {item.children.map((child) => (
-                            <SidebarMenuItem key={child.href}>
-                              <SidebarMenuButton
-                                asChild
-                                isActive={pathname.startsWith(child.href)}
-                                className="data-active:bg-accent data-active:text-accent-foreground pl-8"
-                              >
-                                <Link href={child.href}>
-                                  <child.icon size={18} />
-                                  <span>{child.label}</span>
-                                </Link>
-                              </SidebarMenuButton>
-                            </SidebarMenuItem>
-                          ))}
+                      <div
+                        id={`sidebar-group-${item.label}`}
+                        className={`grid overflow-hidden transition-[grid-template-rows] duration-200 ease-out ${
+                          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+                        }`}
+                      >
+                        <div className="min-h-0 overflow-hidden">
+                          <div className="ml-[1.15rem] flex flex-col gap-1 border-l border-sidebar-border/60 py-1 pl-4">
+                            {item.children.map((child) => {
+                              const isChildActive = pathname.startsWith(
+                                child.href,
+                              );
+                              return (
+                                <SidebarMenuItem key={child.href}>
+                                  <SidebarMenuButton
+                                    asChild
+                                    isActive={isChildActive}
+                                    className={`rounded-lg px-3 py-2 text-[0.875rem] transition-colors duration-150 ${
+                                      isChildActive
+                                        ? "bg-white/15 font-medium"
+                                        : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground"
+                                    }`}
+                                  >
+                                    <Link href={child.href}>
+                                      <child.icon size={15} />
+                                      <span>{child.label}</span>
+                                    </Link>
+                                  </SidebarMenuButton>
+                                </SidebarMenuItem>
+                              );
+                            })}
+                          </div>
                         </div>
-                      )}
+                      </div>
                     </Fragment>
                   );
                 }
@@ -208,10 +236,14 @@ export function AdminSidebar() {
                     <SidebarMenuButton
                       asChild
                       isActive={isActive}
-                      className="data-active:bg-accent data-active:text-accent-foreground"
+                      className={`rounded-xl px-3 py-2.5 transition-colors duration-150 ${
+                        isActive
+                          ? "bg-white/15 font-medium ring-1 ring-white/20"
+                          : "hover:bg-sidebar-accent/60"
+                      }`}
                     >
-                      <Link href={item.href}>
-                        <item.icon size={18} />
+                      <Link href={item.href} className="flex items-center gap-3">
+                        <item.icon size={17} />
                         <span>{item.label}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -225,17 +257,18 @@ export function AdminSidebar() {
 
       <SidebarSeparator />
 
-      <SidebarFooter className="p-6">
-        <div className="flex items-center gap-3 px-2 mb-4">
+      {/* Footer / usuario */}
+      <SidebarFooter className="p-4">
+        <div className="mb-3 flex items-center gap-3 rounded-xl px-2 py-2 transition-colors duration-150 hover:bg-sidebar-accent/50">
           <UserAvatar
             name={`${user?.firstName ?? ""} ${user?.lastName ?? ""}`}
-            className="w-9 h-9"
+            className="h-9 w-9 shrink-0 ring-2 ring-sidebar-border/60"
           />
           <div className="min-w-0">
-            <p className="text-sm font-semibold truncate">
+            <p className="truncate text-sm font-semibold leading-tight">
               {user?.firstName} {user?.lastName}
             </p>
-            <p className="text-xs text-sidebar-foreground/60 truncate">
+            <p className="truncate text-xs text-sidebar-foreground/55">
               {user?.email}
             </p>
           </div>
@@ -243,7 +276,10 @@ export function AdminSidebar() {
 
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton onClick={logout}>
+            <SidebarMenuButton
+              onClick={() => handleLogout()}
+              className="rounded-xl px-3 py-2.5 text-sidebar-foreground/80 transition-colors duration-150 hover:bg-destructive/10 hover:text-destructive"
+            >
               <IoLogOut size={18} />
               <span>Cerrar Sesión</span>
             </SidebarMenuButton>

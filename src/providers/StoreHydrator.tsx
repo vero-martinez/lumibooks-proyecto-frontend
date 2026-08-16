@@ -10,20 +10,16 @@
  *
  * Una vez que el componente se monta en el cliente, se ejecuta
  * manualmente la rehidratación para restaurar los datos guardados
- * en localStorage de los stores de autenticación y carrito.
+ * en localStorage del store de carrito.
  */
 
 import { useEffect } from "react";
-import { useAuthStore } from "@/stores/auth.store";
 import { useCartStore } from "@/stores/cart.store";
 
 export function StoreHydrator() {
     useEffect(() => {
         // Restaurar los datos persistidos del carrito.
         useCartStore.persist.rehydrate();
-
-        // Restaurar los datos persistidos de autenticación.
-        useAuthStore.persist.rehydrate();
     }, []);
 
     return null;

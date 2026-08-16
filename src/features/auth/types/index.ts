@@ -1,8 +1,19 @@
 /**
  * Tipos específicos del módulo de autenticación.
- * LoginFormData y RegisterFormData representan los datos
- * que el usuario escribe en los formularios.
  */
+
+import { Role } from "@/types/api.types";
+
+// Respuesta del backend para login, registro y renovación de sesión
+export interface AuthResponse {
+    token: string;
+    tokenType: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    role: Role;
+    message: string;
+}
 
 // Datos del formulario de login
 export interface LoginFormData {
@@ -20,4 +31,16 @@ export interface RegisterFormData {
     cellphone?: string; // opcional
     acceptsTerms: boolean;
     subscribedToNewsletter?: boolean; // opcional
+}
+
+// Datos enviados al backend para solicitar un código de recuperación
+export interface ForgotPasswordRequest {
+    email: string;
+}
+
+// Datos enviados al backend para restablecer la contraseña
+export interface ResetPasswordRequest {
+    email: string;
+    code: string;
+    newPassword: string;
 }

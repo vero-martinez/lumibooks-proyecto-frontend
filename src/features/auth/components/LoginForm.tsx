@@ -13,7 +13,11 @@ import { IconInput } from "@/components/shared/IconInput";
 import { PasswordInput } from "@/components/shared/PasswordInput";
 import { LoadingButton } from "@/components/shared/LoadingButton";
 
-export function LoginForm() {
+interface LoginFormProps {
+    onForgotPassword?: () => void;
+}
+
+export function LoginForm({ onForgotPassword }: LoginFormProps) {
     const { mutate: login, isPending } = useLogin();
 
     const {
@@ -50,6 +54,18 @@ export function LoginForm() {
                     {...register("password")}
                 />
             </FormField>
+
+            {onForgotPassword && (
+                <div className="-mt-3 text-right">
+                    <button
+                        type="button"
+                        onClick={onForgotPassword}
+                        className="text-sm text-muted-foreground hover:text-foreground hover:underline transition-colors"
+                    >
+                        ¿Olvidaste tu contraseña?
+                    </button>
+                </div>
+            )}
 
             <LoadingButton
                 type="submit"
