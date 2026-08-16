@@ -7,8 +7,14 @@
  * Las cookies httpOnly son creadas y manejadas por Next.js.
  */
 
-import { AuthResponse } from "@/types/api.types";
-import { LoginFormData, RegisterFormData } from "@/features/auth/types";
+import { ApiResponse } from "@/types/api.types";
+import {
+    AuthResponse,
+    LoginFormData,
+    RegisterFormData,
+    ForgotPasswordRequest,
+    ResetPasswordRequest,
+} from "@/features/auth/types";
 
 /**
  * Inicia sesión mediante el endpoint interno de Next.js.
@@ -86,4 +92,49 @@ export async function refreshService(): Promise<string> {
     }
 
     return result.token;
+}
+
+/**
+ * Solicita el envío de un código de recuperación de contraseña.
+ *
+ * El backend responde siempre 200 (incluso si el correo no está registrado)
+ * para no revelar qué cuentas existen.
+ */
+export async function forgotPasswordService(
+    data: ForgotPasswordRequest
+): Promise<ApiResponse> {
+    const response = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        throw new Error(result.message || "No se pudo enviar el código");
+    }
+
+    return result;
+}
+
+/**
+ * Restablece la contraseña con el código de recuperación.
+ */
+export async function resetPasswordService(
+    data: ResetPasswordRequest
+): Promise<ApiResponse> {
+    const response = await fetch("/api/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+        throw new Error(result.message || "No se pudo restablecer la contraseña");
+    }
+
+    return result;
 }
