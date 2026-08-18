@@ -85,7 +85,7 @@ export function CheckoutSummary({
         {/* Lista mini de items */}
         <ul className="space-y-4" aria-label="Productos en el pedido">
           {items.map((item) => (
-            <SummaryItem key={item.booksId} item={item} />
+            <SummaryItem key={item.bookId} item={item} />
           ))}
         </ul>
 

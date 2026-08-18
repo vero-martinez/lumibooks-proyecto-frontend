@@ -31,7 +31,7 @@ export interface OrderCreateRequest {
 
 // Item dentro de la respuesta de una orden
 export interface OrderItemResponse {
-    booksId: number;
+    bookId: number;
     coverImageUrl: string;
     title: string;
     unitPrice: number;
