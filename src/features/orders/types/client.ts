@@ -47,7 +47,7 @@ export interface CheckoutAddressResponse {
     districtName: string;
     provinceName: string;
     departmentName: string;
-    shippingCost: number;
+    shippingCost: number | null;
     isShippingAvailable: boolean;
 }
 
