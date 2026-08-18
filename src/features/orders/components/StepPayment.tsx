@@ -13,6 +13,7 @@ import {
   FaShieldAlt,
 } from "react-icons/fa";
 import { IconInput } from "@/components/shared/IconInput";
+import { CreditCardPreview } from "@/components/shared/CreditCardPreview";
 import { Card } from "@/components/ui/card";
 import { FormField } from "@/components/shared/FormField";
 import { STEP_PAYMENT } from "@/features/orders/constants";
@@ -66,10 +67,6 @@ export function StepPayment({ form }: StepPaymentProps) {
     [setValue],
   );
 
-  const displayName =
-    [cardHolderFirstName, cardHolderLastName].filter(Boolean).join(" ") ||
-    "TU NOMBRE";
-
   return (
     <div className="space-y-10">
       {/* Sección: Preview de tarjeta */}
@@ -83,41 +80,12 @@ export function StepPayment({ form }: StepPaymentProps) {
           </h3>
         </div>
 
-        <div className="relative mx-auto max-w-sm overflow-hidden rounded-2xl bg-gradient-to-br from-primary via-primary to-primary/80 p-6 text-primary-foreground shadow-xl shadow-primary/25">
-          <div className="relative flex items-center justify-between mb-8">
-            {/* Chip */}
-            <div
-              className="h-8 w-10 rounded-md bg-gradient-to-br from-yellow-200 to-yellow-400/80 shadow-inner"
-              aria-hidden="true"
-            />
-            <span className="text-xs font-semibold uppercase tracking-widest opacity-80">
-              Tarjeta
-            </span>
-          </div>
-
-          <p className="relative font-mono text-xl tracking-[0.2em] mb-7 drop-shadow-sm">
-            {cardNumber || "•••• •••• •••• ••••"}
-          </p>
-
-          <div className="relative flex items-end justify-between text-sm">
-            <div className="min-w-0">
-              <p className="text-[10px] uppercase tracking-wide opacity-60 mb-0.5">
-                Titular
-              </p>
-              <p className="font-semibold uppercase tracking-wide text-sm truncate max-w-[180px]">
-                {displayName}
-              </p>
-            </div>
-            <div className="text-right shrink-0">
-              <p className="text-[10px] uppercase tracking-wide opacity-60 mb-0.5">
-                Vence
-              </p>
-              <p className="font-semibold tracking-wide">
-                {expiryDate || "MM/AA"}
-              </p>
-            </div>
-          </div>
-        </div>
+        <CreditCardPreview
+          cardNumber={cardNumber}
+          cardHolderFirstName={cardHolderFirstName}
+          cardHolderLastName={cardHolderLastName}
+          expiryDate={expiryDate}
+        />
       </section>
 
       {/* Sección: Datos de la tarjeta */}
