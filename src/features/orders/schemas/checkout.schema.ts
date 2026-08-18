@@ -60,7 +60,7 @@ export const paymentSchema = z.object({
         .string()
         .trim()
         .min(1, "El número de tarjeta es obligatorio")
-        .regex(/^\d{16}$/, "El número de tarjeta debe tener 16 dígitos"),
+        .regex(/^(\d{4}\s?){4}$/, "El número de tarjeta debe tener 16 dígitos"),
 
     expiryDate: z
         .string()
