@@ -7,3 +7,8 @@ export * from "./CheckoutSummary";
 export * from "./StepShipping";
 export * from "./StepPayment";
 export * from "./StepReview";
+export * from "./ClientOrdersList";
+export * from "./ClientOrderCard";
+export * from "./OrderStatusBadge";
+export * from "./OrderStatusStepper";
+export * from "./OrderDetailDialog";
