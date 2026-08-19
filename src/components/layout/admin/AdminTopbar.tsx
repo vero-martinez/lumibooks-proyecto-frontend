@@ -13,7 +13,7 @@ import { IoMdCloseCircle } from "react-icons/io";
 import { useSidebar } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 
-export function AdminTopbar() {
+export function AdminTopbar({ dashboardPath }: { dashboardPath: string }) {
   const { openMobile, setOpenMobile } = useSidebar();
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export function AdminTopbar() {
       <header className="w-full px-4 py-3">
         <div className="flex items-center justify-between gap-4">
           <Link
-            href="/admin/dashboard"
+            href={dashboardPath}
             className="flex items-center gap-3 shrink-0"
           >
             <Image src="/logo.svg" alt="LumiBooks" width={40} height={40} />
