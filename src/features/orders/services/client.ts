@@ -5,9 +5,12 @@
 import api from "@/lib/axios";
 import type {
     CheckoutPreviewResponse,
+    ClientOrderFilters,
     OrderClientResponse,
+    OrderClientDetailResponse,
     OrderCreateRequest,
 } from "@/features/orders/types";
+import type { PageResponse } from "@/types/api.types";
 
 /**
  * Obtiene la vista previa del checkout para una dirección específica.
@@ -30,5 +33,28 @@ export async function createOrderService(
     request: OrderCreateRequest,
 ): Promise<OrderClientResponse> {
     const { data } = await api.post("/api/client/orders", request);
+    return data;
+}
+
+/**
+ * Obtiene la lista paginada de pedidos del usuario autenticado.
+ * Soporta filtro por status y ordenamiento.
+ */
+export async function getClientOrdersService(
+    filters: ClientOrderFilters,
+): Promise<PageResponse<OrderClientResponse>> {
+    const { data } = await api.get("/api/client/orders", {
+        params: { ...filters, sort: "createdAt,desc" },
+    });
+    return data;
+}
+
+/**
+ * Obtiene el detalle completo de un pedido del usuario autenticado.
+ */
+export async function getClientOrderDetailService(
+    orderId: number,
+): Promise<OrderClientDetailResponse> {
+    const { data } = await api.get(`/api/client/orders/${orderId}`);
     return data;
 }
