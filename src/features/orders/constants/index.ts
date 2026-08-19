@@ -90,3 +90,55 @@ export const CHECKOUT_SUMMARY = {
     multipleProducts: (count: number) => `${count} productos`,
     quantityLabel: "Cantidad:",
 };
+
+// ─── Mis Pedidos ────────────────────────────────────────
+
+import type { OrderStatus } from "@/features/orders/types";
+
+// Labels legibles por estado
+export const ORDER_STATUS_LABEL: Record<OrderStatus, string> = {
+    PENDIENTE: "Pendiente",
+    EN_PREPARACION: "En preparación",
+    ENVIADO: "Enviado",
+    ENTREGADO: "Entregado",
+};
+
+// Opciones de filtro por status (tabs)
+export const ORDER_FILTER_OPTIONS: readonly {
+    value: OrderStatus | "";
+    label: string;
+}[] = [
+    { value: "", label: "Todos" },
+    { value: "PENDIENTE", label: "Pendiente" },
+    { value: "EN_PREPARACION", label: "En preparación" },
+    { value: "ENVIADO", label: "Enviado" },
+    { value: "ENTREGADO", label: "Entregado" },
+];
+
+// Orden de los pasos del stepper de estado
+export const ORDER_STATUS_STEPS: readonly OrderStatus[] = [
+    "PENDIENTE",
+    "EN_PREPARACION",
+    "ENVIADO",
+    "ENTREGADO",
+];
+
+// Textos de la página de pedidos
+export const CLIENT_ORDERS = {
+    title: "Mis pedidos",
+    description: "Consulta el estado y el historial de tus pedidos.",
+    loading: "Cargando tus pedidos...",
+    error: "Error al cargar los pedidos",
+    errorDescription: "No pudimos obtener tus pedidos. Inténtalo de nuevo.",
+    empty: "No tienes pedidos aún",
+    emptyDescription: "Cuando realices una compra, tus pedidos aparecerán aquí.",
+    viewDetail: "Ver detalle",
+    detailTitle: "Pedido",
+    products: "Productos",
+    shippingData: "Datos de envío",
+    recipientData: "Datos del destinatario",
+    summary: "Resumen",
+    created: "Creado",
+    updated: "Actualizado",
+    quantityLabel: "Cant:",
+} as const;
