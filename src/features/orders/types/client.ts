@@ -2,13 +2,47 @@
  * Tipos del módulo de órdenes del cliente.
  */
 
+// Estados posibles de una orden (enum del backend)
+export type OrderStatus =
+    | "PENDIENTE"
+    | "EN_PREPARACION"
+    | "ENVIADO"
+    | "ENTREGADO";
+
+// Filtros para la lista de pedidos del cliente
+export interface ClientOrderFilters {
+    page: number;
+    size: number;
+    status?: OrderStatus | "";
+}
+
 // Resumen de una orden
 export interface OrderClientResponse {
     id: number;
     orderNumber: string;
     total: number;
-    status: string;
+    status: OrderStatus;
     createdAt: string;
+}
+
+// Detalle completo de una orden
+export interface OrderClientDetailResponse {
+    id: number;
+    orderNumber: string;
+    status: OrderStatus;
+    recipientName: string;
+    dni: string;
+    phone: string;
+    addressLine: string;
+    districtName: string;
+    provinceName: string;
+    departmentName: string;
+    subtotal: number;
+    shippingCost: number;
+    total: number;
+    items: OrderItemResponse[];
+    createdAt: string;
+    updatedAt: string;
 }
 
 // Datos de pago con tarjeta (enviados al backend al crear la orden)
