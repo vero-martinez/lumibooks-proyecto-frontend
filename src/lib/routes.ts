@@ -18,6 +18,10 @@ export const ROUTES = {
     wishlist: "/client/wishlist",
     password: "/client/password",
   },
+  gestor: {
+    dashboard: "/gestor/dashboard",
+    orders: "/gestor/orders",
+  },
   admin: {
     dashboard: "/admin/dashboard",
     books: "/admin/books",
