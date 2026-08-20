@@ -5,9 +5,7 @@ import type { OrderStatus, OrderItemResponse } from "./client";
 
 // Filtros para el endpoint de gestión de pedidos
 export interface ManagerOrderFilters {
-  orderNumber?: string;
-  dni?: string;
-  clientName?: string;
+  search?: string;
   status?: OrderStatus;
   dateFrom?: string;
   dateTo?: string;
