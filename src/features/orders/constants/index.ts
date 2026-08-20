@@ -3,6 +3,8 @@
  * Centralizados para evitar strings hardcodeados en los componentes.
  */
 
+export const DEFAULT_PAGE_SIZE = 10;
+
 // Pasos del checkout
 export const CHECKOUT_STEPS = [
     { number: 1, label: "Envío" },
@@ -123,7 +125,41 @@ export const ORDER_STATUS_STEPS: readonly OrderStatus[] = [
     "ENTREGADO",
 ];
 
-// Textos de la página de pedidos
+// ─── Gestor: Gestión de pedidos ─────────────────────────
+
+export const MANAGER_ORDERS = {
+    title: "Gestión de pedidos",
+    description: "Administra y actualiza el estado de los pedidos de los clientes.",
+    loading: "Cargando pedidos...",
+    error: "Error al cargar los pedidos",
+    errorDescription: "No pudimos obtener los pedidos. Inténtalo de nuevo.",
+    empty: "No se encontraron pedidos",
+    emptyDescription: "No hay pedidos que coincidan con los filtros aplicados.",
+    detailTitle: "PEDIDO",
+    products: "Productos",
+    shippingData: "Datos de envío",
+    recipientData: "Datos del destinatario",
+    summary: "Resumen",
+    created: "Creado",
+    updated: "Actualizado",
+    quantityLabel: "Cant:",
+    updateStatus: "Actualizar estado",
+    searchPlaceholder: "Buscar por N° de pedido, DNI o nombre...",
+    dateFrom: "Desde",
+    dateTo: "Hasta",
+    sortLabel: "Ordenar por",
+    clientLabel: "Cliente",
+    managerLabel: "Gestor",
+    noManager: "Sin asignar",
+    dateRangeLabel: "Rango de fechas",
+} as const;
+
+export const MANAGER_ORDER_SORT_OPTIONS = [
+    { value: "createdAt,desc", label: "Más reciente" },
+    { value: "createdAt,asc", label: "Más antiguo" },
+] as const;
+
+// Textos de la página de pedidos del cliente
 export const CLIENT_ORDERS = {
     title: "Mis pedidos",
     description: "Consulta el estado y el historial de tus pedidos.",
