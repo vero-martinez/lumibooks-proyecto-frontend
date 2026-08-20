@@ -12,3 +12,4 @@ export * from "./ClientOrderCard";
 export * from "./OrderStatusBadge";
 export * from "./OrderStatusStepper";
 export * from "./OrderDetailDialog";
+export * from "./ManagerOrdersContainer";
