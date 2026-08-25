@@ -10,11 +10,17 @@ export const ROUTES = {
   authors: "/authors",
   client: {
     cart: "/client/cart",
+    checkout: "/client/checkout",
+    orderConfirmation: "/client/checkout/confirmacion",
     profile: "/client/profile",
     orders: "/client/orders",
     addresses: "/client/addresses",
     wishlist: "/client/wishlist",
     password: "/client/password",
+  },
+  gestor: {
+    dashboard: "/gestor/dashboard",
+    orders: "/gestor/orders",
   },
   admin: {
     dashboard: "/admin/dashboard",

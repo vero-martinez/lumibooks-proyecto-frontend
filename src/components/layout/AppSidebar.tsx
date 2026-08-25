@@ -1,6 +1,6 @@
 /**
- * Sidebar de navegación del panel de administración.
- * Muestra logo, enlaces de navegación con estado activo y botón de logout.
+ * Sidebar de navegación reutilizable para paneles admin y gestor.
+ * Soporta items tipo link simple y submenús colapsables (catalog).
  */
 "use client";
 
@@ -8,25 +8,11 @@ import { Fragment, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import {
-  FaBook,
-  FaShoppingCart,
-  FaListUl,
-  FaUsers,
-  FaStar,
-  FaImage,
-  FaHistory,
-  FaCreditCard,
-  FaTag,
-  FaBuilding,
-  FaChevronDown,
-} from "react-icons/fa";
-import { FaUser } from "react-icons/fa6";
-import { IoLogOut, IoHome } from "react-icons/io5";
+import { FaChevronDown } from "react-icons/fa";
+import { IoLogOut } from "react-icons/io5";
 import { useAuthStore } from "@/stores/auth.store";
 import { useLogout } from "@/features/auth/hooks";
 import { UserAvatar } from "@/components/shared/UserAvatar";
-import { ROUTES } from "@/lib/routes";
 import {
   Sidebar,
   SidebarContent,
@@ -40,13 +26,13 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 
-interface SidebarChild {
+export interface SidebarChild {
   href: string;
   label: string;
   icon: React.ComponentType<{ size?: number }>;
 }
 
-type SidebarItemData =
+export type SidebarItemData =
   | {
       type: "link";
       href: string;
@@ -61,54 +47,23 @@ type SidebarItemData =
       children: SidebarChild[];
     };
 
-const SIDEBAR_ITEMS: SidebarItemData[] = [
-  {
-    type: "link",
-    href: ROUTES.admin.dashboard,
-    label: "Dashboard",
-    icon: IoHome,
-    exact: true,
-  },
-  { type: "link", href: ROUTES.admin.books, label: "Libros", icon: FaBook },
-  {
-    type: "catalog",
-    label: "Catálogo",
-    icon: FaListUl,
-    children: [
-      { href: ROUTES.admin.catalog.authors, label: "Autores", icon: FaUser },
-      { href: ROUTES.admin.catalog.categories, label: "Categorías", icon: FaTag },
-      {
-        href: ROUTES.admin.catalog.publishers,
-        label: "Editoriales",
-        icon: FaBuilding,
-      },
-    ],
-  },
-  {
-    type: "link",
-    href: ROUTES.admin.orders,
-    label: "Pedidos",
-    icon: FaShoppingCart,
-  },
-  { type: "link", href: ROUTES.admin.users, label: "Usuarios", icon: FaUsers },
-  { type: "link", href: ROUTES.admin.reviews, label: "Reseñas", icon: FaStar },
-  { type: "link", href: ROUTES.admin.banners, label: "Banners", icon: FaImage },
-  { type: "link", href: ROUTES.admin.history, label: "Historial", icon: FaHistory },
-  {
-    type: "link",
-    href: ROUTES.admin.subscriptions,
-    label: "Suscripciones",
-    icon: FaCreditCard,
-  },
-];
+interface AppSidebarProps {
+  items: SidebarItemData[];
+  ariaLabel: string;
+  brandLabel: string;
+  dashboardHref: string;
+}
 
-export function AdminSidebar() {
+export function AppSidebar({
+  items,
+  ariaLabel,
+  brandLabel,
+  dashboardHref,
+}: AppSidebarProps) {
   const pathname = usePathname();
   const user = useAuthStore((s) => s.user);
   const { mutate: handleLogout } = useLogout();
-  const [openGroups, setOpenGroups] = useState<Set<string>>(
-    new Set(["Catálogo"]),
-  );
+  const [openGroups, setOpenGroups] = useState<Set<string>>(new Set());
 
   const toggleGroup = (label: string) => {
     setOpenGroups((prev) => {
@@ -124,13 +79,13 @@ export function AdminSidebar() {
 
   return (
     <Sidebar
-      aria-label="Menú de administración"
+      aria-label={ariaLabel}
       className="rounded-r-2xl overflow-hidden border-r border-sidebar-border/60 shadow-sm"
     >
       {/* Header */}
       <SidebarHeader className="hidden lg:flex flex-col items-center py-7">
         <Link
-          href={ROUTES.admin.dashboard}
+          href={dashboardHref}
           className="flex flex-col items-center gap-2"
         >
           <span className="grid place-items-center rounded-2xl bg-sidebar-accent/40 p-2.5 ring-1 ring-sidebar-border/50 transition-all duration-200 group-hover:ring-primary/40 group-focus-visible:ring-2 group-focus-visible:ring-primary">
@@ -146,7 +101,7 @@ export function AdminSidebar() {
             LumiBooks
           </span>
           <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-sidebar-foreground/45">
-            Panel admin
+            {brandLabel}
           </span>
         </Link>
       </SidebarHeader>
@@ -158,7 +113,7 @@ export function AdminSidebar() {
         <SidebarGroup className="px-4 py-5">
           <SidebarGroupContent>
             <SidebarMenu className="gap-1 text-[0.925rem]">
-              {SIDEBAR_ITEMS.map((item) => {
+              {items.map((item) => {
                 if (item.type === "catalog") {
                   const isOpen = openGroups.has(item.label);
                   const hasActiveChild = item.children.some((c) =>

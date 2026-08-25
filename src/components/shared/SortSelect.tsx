@@ -26,6 +26,8 @@ interface SortSelectProps {
     /** aria-label del trigger */
     ariaLabel?: string;
     className?: string;
+    /** Si es false, oculta la opción "none" (placeholder) del dropdown */
+    allowNone?: boolean;
 }
 
 export function SortSelect({
@@ -35,6 +37,7 @@ export function SortSelect({
     placeholder = "Ordenar por",
     ariaLabel = "Ordenar por",
     className,
+    allowNone = true,
 }: SortSelectProps) {
     return (
         <Select
@@ -52,9 +55,11 @@ export function SortSelect({
             </SelectTrigger>
 
             <SelectContent className="min-w-[var(--radix-select-trigger-width)] shadow-xl">
-                <SelectItem value="none" className="text-muted-foreground">
-                    {placeholder}
-                </SelectItem>
+                {allowNone && (
+                    <SelectItem value="none" className="text-muted-foreground">
+                        {placeholder}
+                    </SelectItem>
+                )}
 
                 {options.map((opt) => (
                     <SelectItem

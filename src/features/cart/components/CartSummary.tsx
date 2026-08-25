@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { formatPrice } from "@/lib/utils";
+import { ROUTES } from "@/lib/routes";
 
 interface CartSummaryProps {
   subtotal: number;
@@ -36,9 +37,16 @@ export function CartSummary({ subtotal, total }: CartSummaryProps) {
           <span className="font-bold text-xl text-foreground">{formatPrice(total)}</span>
         </div>
 
-        <Button type="button" className="w-full gap-2 py-6 text-lg mb-4" size="lg">
-          <FaShoppingCart className="size-6" aria-hidden="true" />
-          Finalizar Compra
+        <Button
+          type="button"
+          className="w-full gap-2 py-6 text-lg mb-4"
+          size="lg"
+          asChild
+        >
+          <Link href={ROUTES.client.checkout}>
+            <FaShoppingCart className="size-6" aria-hidden="true" />
+            Finalizar Compra
+          </Link>
         </Button>
 
         <Link
