@@ -16,6 +16,7 @@ export const ROUTES = {
     orders: "/client/orders",
     addresses: "/client/addresses",
     wishlist: "/client/wishlist",
+    reviews: "/client/reviews",
     password: "/client/password",
   },
   gestor: {
