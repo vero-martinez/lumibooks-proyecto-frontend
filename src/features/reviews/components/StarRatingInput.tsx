@@ -13,14 +13,17 @@ interface StarRatingInputProps {
     value: number | null;
     onChange: (value: number) => void;
     disabled?: boolean;
+    /** Id para asociar el grupo con un label externo (htmlFor) */
+    id?: string;
 }
 
-export function StarRatingInput({ value, onChange, disabled = false }: StarRatingInputProps) {
+export function StarRatingInput({ value, onChange, disabled = false, id }: StarRatingInputProps) {
     const [hovered, setHovered] = useState<number | null>(null);
     const displayed = hovered ?? value ?? 0;
 
     return (
         <div
+            id={id}
             role="radiogroup"
             aria-label="Calificación"
             className="flex items-center gap-1"
