@@ -159,6 +159,42 @@ export const MANAGER_ORDER_SORT_OPTIONS = [
     { value: "createdAt,asc", label: "Más antiguo" },
 ] as const;
 
+// ─── Admin: Gestión de pedidos ─────────────────────────
+
+export const ADMIN_ORDERS = {
+    title: "Pedidos",
+    description: "Consulta y administra los pedidos de los clientes.",
+    loading: "Cargando pedidos...",
+    error: "Error al cargar los pedidos",
+    errorDescription: "No pudimos obtener los pedidos. Inténtalo de nuevo.",
+    empty: "No se encontraron pedidos",
+    emptyDescription: "No hay pedidos que coincidan con los filtros aplicados.",
+    detailTitle: "PEDIDO",
+    products: "Productos",
+    shippingData: "Datos de envío",
+    recipientData: "Datos del destinatario",
+    summary: "Resumen",
+    created: "Creado",
+    updated: "Actualizado",
+    quantityLabel: "Cant:",
+    assignManager: "Asignar gestor",
+    searchPlaceholder: "Buscar por N° de pedido, DNI o nombre del cliente...",
+    dateRangeLabel: "Rango de fechas",
+    clientLabel: "Cliente",
+    managerLabel: "Gestor",
+    noManager: "Sin asignar",
+    managerDialogTitle: "Asignar gestor",
+    managerDialogDescription: "Selecciona el gestor que se encargará de este pedido.",
+    managerDialogConfirm: "Asignar",
+    managerDialogSuccess: "Gestor asignado correctamente",
+    managerDialogError: "Error al asignar el gestor",
+} as const;
+
+export const ADMIN_ORDER_SORT_OPTIONS = [
+    { value: "createdAt,desc", label: "Más reciente" },
+    { value: "createdAt,asc", label: "Más antiguo" },
+] as const;
+
 // Textos de la página de pedidos del cliente
 export const CLIENT_ORDERS = {
     title: "Mis pedidos",
