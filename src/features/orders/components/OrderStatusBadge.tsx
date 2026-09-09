@@ -1,8 +1,8 @@
 /**
  * Badge que muestra el estado de una orden con color.
+ * Delega el render compartido en StatusBadge.
  */
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { StatusBadge } from "@/components/shared/StatusBadge";
 import { ORDER_STATUS_LABEL } from "@/features/orders/constants";
 import type { OrderStatus } from "@/features/orders/types";
 
@@ -31,19 +31,11 @@ interface OrderStatusBadgeProps {
 
 export function OrderStatusBadge({ status, className }: OrderStatusBadgeProps) {
     return (
-        <Badge
-            variant="outline"
-            className={cn(
-                "gap-2 rounded-full p-3 text-xs font-medium",
-                STATUS_STYLES[status],
-                className
-            )}
-        >
-            <span
-                className={cn("size-1.5 rounded-full", STATUS_DOT[status])}
-                aria-hidden="true"
-            />
-            {ORDER_STATUS_LABEL[status]}
-        </Badge>
+        <StatusBadge
+            label={ORDER_STATUS_LABEL[status]}
+            colorClass={STATUS_STYLES[status]}
+            dotClass={STATUS_DOT[status]}
+            className={className}
+        />
     );
 }

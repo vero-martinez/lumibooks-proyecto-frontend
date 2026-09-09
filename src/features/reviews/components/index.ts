@@ -8,3 +8,8 @@ export * from "./PendingReviewCard";
 export * from "./MyReviewsList";
 export * from "./ReviewFormDialog";
 export * from "./ClientReviewsContainer";
+export * from "./ReviewStatusBadge";
+export * from "./ReviewsTableAdmin";
+export * from "./ReviewFiltersBar";
+export * from "./ReviewDetailDialog";
+export * from "./ReviewsAdmin";
